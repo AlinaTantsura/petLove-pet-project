@@ -1,16 +1,19 @@
 import { useState } from "react";
 import Button from "./Button";
 import sprite from "../assets/images/sprite.svg"
+import { useNavigate } from "react-router-dom";
 
 const AuthNav = () => {
   const [isLogin] = useState(false);
+  const navigate = useNavigate();
   return (
     <div className="flex gap-2 items-center font-bold text-[16px] leading-[125%] tracking-[-0.03em]">
       {isLogin ? (<>
         <Button
           className="px-[35px] py-[15px] rounded-[30px] bg-[#F6B83D] hover:bg-[#f9b020] text-white"
-          text={"LOG OUT"}
-        />
+        >
+          LOG OUT
+        </Button>
         <div className="flex gap-2 items-center"> 
           <div className="w-[50px] h-[50px] bg-[#fff4df] rounded-full flex justify-center items-center">
           <svg className="w-6 h-6">
@@ -23,14 +26,18 @@ const AuthNav = () => {
         </>
       ) : (
         <>
-          <Button
+            <Button
+              onClick={()=> navigate("/login")}
             className="px-[35px] py-[15px] rounded-[30px] bg-[#F6B83D] hover:bg-[#f9b020] text-white"
-            text={"LOG IN"}
-          />
-          <Button
+            >
+              LOG IN
+            </Button>
+            <Button
+              onClick={()=> navigate("/register")}
             className="px-5 py-[15px] rounded-[30px] bg-[#fff4df] hover:bg-[#fbe7c1] text-[#f6b83d]"
-            text={"REGISTRATION"}
-          />
+            >
+            REGISTRATION
+          </Button>
         </>
       )}
     </div>
