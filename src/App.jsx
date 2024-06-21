@@ -1,10 +1,26 @@
-import { LoadingPage } from './components/LoadingPage/LoadingPage'
+// import { LoadingPage } from './components/LoadingPage'
+import { lazy } from "react";
+import { Route, Routes } from "react-router-dom";
+import Layout from "./components/Layout";
+
+const News = lazy(() => import("./pages/Newspage"));
+const Notices = lazy(() => import("./pages/Noticespage"));
+const Friends = lazy(() => import("./pages/Friendspage"));
+const Register = lazy(() => import("./pages/Registerpage"));
+const Login = lazy(() => import("./pages/LoginPage"));
 
 function App() {
-
   return (
-    <LoadingPage />
-  )
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route path='/news' element={<News />} />
+        <Route path="/notices" element={<Notices />} />
+        <Route path="/friends" element={<Friends />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+      </Route>
+    </Routes>
+  );
 }
 
-export default App
+export default App;

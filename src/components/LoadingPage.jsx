@@ -1,9 +1,10 @@
-import loadingImage from '../../assets/images/loadingBackImg@1x-min.png'
-import loadingImage2x from '../../assets/images/loadingBackImg@2x-min.png'
-import loadingImageTablet from '../../assets/images/tablet-loadingBackImg@1x-min.png'
-import loadingImageTablet2x from '../../assets/images/tablet-loadingBackImg@2x-min.png'
-import loadingImageMobile from '../../assets/images/mobile-loadingBackImg@1x-min.png'
-import loadingImageMobile2x from '../../assets/images/mobile-loadingBackImg@2x-min.png'
+import loadingImage from '../assets/images/loadingBackImg@1x-min.png'
+import loadingImage2x from '../assets/images/loadingBackImg@2x-min.png'
+import loadingImageTablet from '../assets/images/tablet-loadingBackImg@1x-min.png'
+import loadingImageTablet2x from '../assets/images/tablet-loadingBackImg@2x-min.png'
+import loadingImageMobile from '../assets/images/mobile-loadingBackImg@1x-min.png'
+import loadingImageMobile2x from '../assets/images/mobile-loadingBackImg@2x-min.png'
+import sprite from '../assets/images/sprite.svg'
 
 export const LoadingPage = () => {
     return (
@@ -15,7 +16,10 @@ export const LoadingPage = () => {
                 <img src={loadingImageMobile} alt="The doctor examines the dog's ear" />
             </picture>
             <div className='absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] rounded-full border-[2px] border-white border-opacity-30 w-[398px] h-[398px]'>
-                <div className='absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] font-bold text-[50px]  md:text-[100px] text-white leading-[100%] tracking-[-0.04em]'>petlove</div>
+                <p className='absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] font-bold text-[50px] md:text-[100px] text-white leading-[100%] tracking-[-0.04em] flex justify-center items-end'>
+                    petl
+                    <svg className='w-11 h-11 md:w-[82px] md:h-[82px]'><use href={sprite + '#icon-heart-circle'} /></svg>
+                    ve</p>
             </div>
                  </div>
       
