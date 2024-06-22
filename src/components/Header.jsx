@@ -4,7 +4,7 @@ import Navigation from "./Navigation";
 
 const Header = () => {
   return (
-    <header className="p-8 flex items-center max-w-[1280px] justify-between">
+    <header className="py-5 md:py-8 xl:px-8 flex items-center max-w-[1280px] justify-between">
       <p className="text-neutral-800 font-bold text-[20px] md:text-[28px] leading-[100%] tracking-[-0.04em] flex items-end">
         petl
         <svg className="w-[17px] h-[17px] md:w-[23px] md:h-[23px]">
