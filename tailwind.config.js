@@ -7,8 +7,12 @@ export default {
   theme: {
     extend: {
       colors: {
+        "black-main": "#262626",
+        "orange-main": "#F6B83D",
         "opacity-black": "rgba(38, 38, 38, 0.5)",
-        "orange-main": "#F6B83D"
+        "border-black": "rgba(38, 38, 38, 0.15)",
+        "border-white": "rgba(255, 255, 255, 0.4)",
+        
       }
     },
   },
