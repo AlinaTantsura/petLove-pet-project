@@ -12,27 +12,24 @@ const Header = () => {
   const isHome = location.pathname === "/" ? true : false;
 
   const handleOpenMenu = () => {
-    setIsOpenMenu(true)
-  }
+    setIsOpenMenu(true);
+  };
   return (
     <>
       <header
-        className={clsx("flex items-center max-w-[1280px] justify-between xl:justify-start",
+        className={clsx(
+          "flex items-center max-w-[1280px] justify-between",
           isHome
             ? "pt-2 pb-5 px-5 md:py-0 md:px-8 xl:px-16"
             : "py-5 md:py-8 xl:px-8"
-        )
-          
-        }
+        )}
       >
         <Link
           to="/"
-          className={clsx("font-bold text-[20px] md:text-[28px] leading-[100%] tracking-[-0.04em] flex items-end",
-            isHome
-              ? "text-white xl:mr-[280px]"
-              : "text-black-main"
-          )
-          }
+          className={clsx(
+            "font-bold text-[20px] md:text-[28px] leading-[100%] tracking-[-0.04em] flex items-end",
+            isHome ? "text-white" : "text-black-main"
+          )}
         >
           petl
           <svg
@@ -46,15 +43,18 @@ const Header = () => {
           </svg>
           ve
         </Link>
-        <div className="flex xl:w-full">
+        <div className="flex">
           <div className="hidden xl:block">
             <Navigation isHome={isHome} />
           </div>
           <div className="flex gap-4 items-center">
             <div className="hidden md:block">
-              <AuthNav isHome={isHome} isHeader='true'/>
+              <AuthNav isHome={isHome} isHeader="true" />
             </div>
-            <button className="w-[32px] md:w-[36px] h-[32px] md:h-[36px] xl:hidden" onClick={handleOpenMenu}>
+            <button
+              className="w-[32px] md:w-[36px] h-[32px] md:h-[36px] xl:hidden"
+              onClick={handleOpenMenu}
+            >
               <svg
                 className={
                   isHome
