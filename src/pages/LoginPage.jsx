@@ -1,10 +1,11 @@
 import LoginForm from "../components/LoginForm";
 import loginPictures from "../assets/images/loginPictures";
+import PetBlock from "../components/PetBlock";
 
 const LoginPage = () => {
   return (
     <div className="flex gap-[10px] md:gap-4 xl:gap-8 flex-col xl:flex-row">
-      <div className="relative min-w-full xl:min-w-[592px] xl:max-w-[592px]">
+      <PetBlock>
         <picture>
           <source
             media="(min-width:1280px)"
@@ -48,7 +49,7 @@ const LoginPage = () => {
             </p>
           </div>
         </div>
-      </div>
+      </PetBlock>
       <LoginForm />
     </div>
   );

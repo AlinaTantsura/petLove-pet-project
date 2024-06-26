@@ -2,9 +2,32 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 import sprite from "../assets/images/sprite.svg";
 import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import clsx from "clsx";
+import { useState } from "react";
+import Title from "./Title";
+
+const loginSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required()
+    .matches(
+      /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
+      "Enter a valid Email"
+    ),
+  password: yup.string().required().min(7),
+});
 
 const LoginForm = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const [password, setPassword] = useState("");
+  const [isShownPass, setIsShownPass] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: {errors},
+    reset,
+  } = useForm({ resolver: yupResolver(loginSchema) });
   const onSubmit = (data) => {
     console.log(data);
     reset();
@@ -15,38 +38,83 @@ const LoginForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="w-[295px] md:w-[424px]">
-        <h2 className="mb-3 font-bold text-[28px] md:text-[54px] leading-[100%] tracking-[-0.04em]">
-          Log in
-        </h2>
+        <Title>Log in</Title>
         <p className="mb-6 md:mb-8 text-[14px] md:text-[18px] leading-[122%] tracking-[-0.02em]">
           Welcome! Please enter your credentials to login to the platform:
         </p>
-        <input
-          className="w-full p-3 md:p-4 border border-[rgba(38, 38, 38, 0.15)] rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]"
-          type="email"
-          placeholder="Email"
-          {...register("email")}
-        />
+        <div className="relative ">
+          <input
+            className={clsx(
+              "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]",
+              errors.email && "border-error-color"
+            )}
+            type="email"
+            placeholder="Email"
+            {...register("email")}
+          />
+          {errors.email && (
+            <>
+              <svg className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] absolute top-[12px] md:top-[15px] right-[12px] md:right-[19px] ">
+                <use href={sprite + "#icon-cross-small"} />
+              </svg>
+              <span className="ml-4 text-[10px] md:text-[12px] leading-[120%] md:leading-[117%] text-error-color">
+                {errors.email.message}
+              </span>
+            </>
+          )}
+        </div>
         <div className="relative mt-[10px] md:mt-4">
           <input
-            className="w-full p-3 md:p-4 border border-[rgba(38, 38, 38, 0.15)] rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]"
-            type="password"
+            className={clsx(
+              "w-full p-3 md:p-4 border border-border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]",
+              errors.password && "border-error-color",
+              password.length > 6 && "border-[#08aa83]"
+            )}
+            type={isShownPass ? "text" : "password"}
             placeholder="Password"
-            {...register("password")}
+            {...register("password", {
+              onChange: (e) => setPassword(e.target.value),
+            })}
           />
-          <svg className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] absolute top-1/2 right-[12px] md:right-[16px] translate-y-[-50%]">
-            <use href={sprite + "#icon-eye-off"} />
-          </svg>
+          <button
+            onClick={() => setIsShownPass(!isShownPass)}
+            className="absolute top-[12px] md:top-[15px] right-[12px] md:right-[16px]"
+          >
+            <svg className={clsx("w-[18px] h-[18px] md:w-[22px] md:h-[22px]")}>
+              <use
+                href={
+                  isShownPass ? sprite + "#icon-eye" : sprite + "#icon-eye-off"
+                }
+              />
+            </svg>
+          </button>
+          {errors.password && (
+            <>
+              <svg className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] absolute top-[12px] md:top-[15px] right-[38px] md:right-[50px] ">
+                <use href={sprite + "#icon-cross-small"} />
+              </svg>
+              <span className="ml-4 text-[10px] md:text-[12px] leading-[120%] md:leading-[117%] text-error-color">
+                {errors.password.message}
+              </span>
+            </>
+          )}
+          {password.length > 6 && (
+            <>
+              <svg className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] absolute top-[12px] md:top-[15px] right-[38px] md:right-[50px] ">
+                <use href={sprite + "#icon-check"} />
+              </svg>
+              <span className="ml-4 text-[10px] md:text-[12px] leading-[120%] md:leading-[117%] text-[#08aa83]">
+                Password is secure
+              </span>
+            </>
+          )}
         </div>
         <Button className="mt-10 md:mt-[64px] mb-3 md:mb-4 w-full py-3 md:py-4 rounded-[30px] bg-orange-main hover:bg-[#f9b020] font-bold text-white text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]">
           LOG IN
         </Button>
         <p className="leading-[117%] md:leading-[143%] text-opacity-black text-[12px] md:text-[14px] text-center">
           Don’t have an account?
-          <Link
-            to="/register"
-            className="ml-1 text-orange-main underline"
-          >
+          <Link to="/register" className="ml-1 text-orange-main underline">
             Register
           </Link>
         </p>
