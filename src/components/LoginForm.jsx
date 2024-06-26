@@ -7,6 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
 import { useState } from "react";
 import Title from "./Title";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../redux/auth/authOperations";
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -22,6 +24,7 @@ const loginSchema = yup.object().shape({
 const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [isShownPass, setIsShownPass] = useState(false);
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -29,7 +32,7 @@ const LoginForm = () => {
     reset,
   } = useForm({ resolver: yupResolver(loginSchema) });
   const onSubmit = (data) => {
-    console.log(data);
+    dispatch(loginUser(data))
     reset();
   };
   return (

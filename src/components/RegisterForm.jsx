@@ -42,7 +42,6 @@ const RegisterForm = () => {
     resolver: yupResolver(registerSchema),
   });
   const onSubmit = (data) => {
-    console.log(data);
     if(password !== confirmPassword) return
     dispatch(registerUser({name: data.name, email: data.email, password: data.password}))
     reset();
