@@ -3,12 +3,14 @@ import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 
+const Addpet = lazy(() => import("./pages/Addpetpage"))
 const Home = lazy(() => import("./pages/Homepage"))
 const News = lazy(() => import("./pages/Newspage"));
 const Notices = lazy(() => import("./pages/Noticespage"));
 const Friends = lazy(() => import("./pages/Friendspage"));
 const Register = lazy(() => import("./pages/Registerpage"));
 const Login = lazy(() => import("./pages/LoginPage"));
+const Profile = lazy(() => import("./pages/Profilepage"))
 const Error = lazy(()=>import("./pages/Errorpage"))
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
         <Route path="/friends" element={<Friends />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/add-pet" element={<Addpet />} />
         <Route path="*" element={<Error />} />
       </Route>
     </Routes>

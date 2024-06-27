@@ -5,10 +5,14 @@ import Navigation from "./Navigation";
 import { useState } from "react";
 import MenuBar from "./MenuBar";
 import clsx from "clsx";
+import { useSelector } from "react-redux";
+import { selectUser } from "../redux/auth/authSelectors";
 
 const Header = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const location = useLocation();
+  const { token } = useSelector(selectUser);
+  const isLogin = Boolean(token);
   const isHome = location.pathname === "/" ? true : false;
 
   const handleOpenMenu = () => {
@@ -43,7 +47,9 @@ const Header = () => {
           </svg>
           ve
         </Link>
-        <div className="flex">
+        <div className={clsx("flex",
+          isHome && isLogin && "xl:w-[65%] xl:justify-between"
+        )}>
           <div className="hidden xl:block">
             <Navigation isHome={isHome} />
           </div>
