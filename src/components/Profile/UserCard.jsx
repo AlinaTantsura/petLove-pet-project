@@ -5,7 +5,7 @@ import UserBlock from "./UserBlock";
 
 const UserCard = () => {
   return (
-    <section className=" relative bg-white rounded-[30px] md:rounded-[60px] p-5 pb-10 md:p-10">
+    <section className="relative xl:w-[520px] bg-white rounded-[30px] md:rounded-[60px] p-5 pb-10 md:p-10">
       <EditUserBtn />
       <UserBlock />
       <PetsBlock />

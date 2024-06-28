@@ -13,9 +13,13 @@
   font-weight: 500;
   line-height: 125%;
   letter-spacing: -0.03em;
-  color: "#262626";
 }
 
 body{
   background-color: #f4f4f4;
+}
+
+ul, li{
+  margin: 0;
+  padding: 0;
 }
