@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loginUser, logoutUser, registerUser } from "./authOperations";
+import { getOurFriends } from "../ourFriends/ourFriendsOpertions";
 
 const authSlice = createSlice({
     name: 'auth',
@@ -8,7 +9,8 @@ const authSlice = createSlice({
             token: '' || localStorage.getItem("token")
         },
         error: null,
-        isLoading: false
+        isLoading: false,
+        friends: [],
     },
     extraReducers: (builder) => {
         builder.addCase(registerUser.pending, (state) => {
@@ -53,6 +55,21 @@ const authSlice = createSlice({
             state.isLoading = false;
             state.error = actions.payload;
         });
+        builder.addCase(getOurFriends.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+        });
+        builder.addCase(getOurFriends.fulfilled, (state, actions) => {
+            state.isLoading = false;
+            state.error = null;
+            state.friends = actions.payload;
+        });
+        builder.addCase(getOurFriends.rejected, (state, actions) => {
+            state.isLoading = false;
+            state.error = actions.payload;
+        });
+
+        
         
     }
 });

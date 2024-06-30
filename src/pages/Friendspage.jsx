@@ -1,6 +1,12 @@
+import FriendsList from "../components/FriendsList"
+import Title from "../components/Title"
+
 const FriendsPage = () => {
   return (
-    <div>Friendspage</div>
+    <>
+      <Title>Our friends</Title>
+      <FriendsList />
+    </>
   )
 }
 
