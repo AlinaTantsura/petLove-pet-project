@@ -1,12 +1,18 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import authReducer from "./auth/authSlice";
+import {configureStore } from "@reduxjs/toolkit";
+import authReducer from "./auth/authSlice.js";
+import newsReducer from "./news/newsSlice.js";
 // import friendsReducer from "./ourFriends/ourFriendsSlice";
 
-const rootReducer = combineReducers({
-//   friends: friendsReducer,
-    auth: authReducer
-})
+// const rootReducer = combineReducers({
+//     auth: authReducer,
+//     news: newsReducer
+// })
 
-export const store = configureStore({
-    reducer: rootReducer
-})
+const store = configureStore({
+    reducer: {
+        news: newsReducer,
+        auth: authReducer,
+    }
+});
+
+export default store
