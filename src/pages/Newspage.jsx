@@ -15,7 +15,7 @@ const Newspage = () => {
       <div className=" mb-5 md:mb-[44px] xl:mb-[60px] md:flex md:justify-between md:items-center">
         <Title>News</Title>
         <div className="mt-5 md:mt-0">
-        <SearchField setSearchWord={setSearchWord} />
+        <SearchField setSearchWord={setSearchWord} isNews={true}/>
         </div>
       </div>
       <NewsList page={page} searchWord={searchWord} />

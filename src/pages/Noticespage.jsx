@@ -6,7 +6,9 @@ import Title from "../components/Title"
 const Noticespage = () => {
   return (
     <div className="mt-[34px]">
+      <div className="xl:ml-8">
       <Title>Find your favorite pet</Title>
+      </div>
       <NoticesFilters />
       <NoticesList />
       {/* <Pagination /> */}
