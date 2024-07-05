@@ -2,17 +2,19 @@
 import clsx from "clsx";
 import sprite from "../../assets/images/sprite.svg";
 import { useState } from "react";
+import { changeSearchWord } from "../../redux/slice";
 
-const SearchField = ({ setSearchWord, isNews = false }) => {
+const SearchField = ({ isNews = false }) => {
   const [searchCurrent, setSearchCurrent] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSearchWord(e.target.elements.search.value);
+    console.log(e.target.elements.search.value)
+    changeSearchWord(e.target.elements.search.value);
   };
 
   return (
     <form onSubmit={handleSubmit} className={clsx("relative md:mt-0 w-full",
-      isNews ? "md:w-[230px]" : " md:w-[265px]"
+      isNews && "md:w-[230px]"
     )}>
       <input
         name="search"
@@ -36,7 +38,7 @@ const SearchField = ({ setSearchWord, isNews = false }) => {
           </svg>
         </button>
       )}
-      <button className="w-[18px] h-[18px] absolute top-[13px] md:top-[14px] right-3 md:right-[14px]">
+      <button  className="w-[18px] h-[18px] absolute top-[13px] md:top-[14px] right-3 md:right-[14px]">
         <svg className="w-full h-full">
           <use href={sprite + "#icon-search"} />
         </svg>

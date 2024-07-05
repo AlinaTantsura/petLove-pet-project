@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Header from "./Header";
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectIsLoading } from "../redux/auth/authSelectors";
+import { selectIsLoading } from "../redux/selectors";
 import { LoadingPage } from "./LoadingPage";
 
 const Layout = () => {

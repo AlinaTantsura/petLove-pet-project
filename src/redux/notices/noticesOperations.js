@@ -52,3 +52,16 @@ export const getCities = createAsyncThunk(
         }
     }
 )
+
+export const getNotices = createAsyncThunk(
+    "notices/getNotices",
+    async (page, thunkAPI) => {
+        try {
+            const resp = await axios.get(`/notices?page=${page}`);
+            return resp.data
+        } catch (error) {
+            console.log(error);
+            thunkAPI.rejectWithValue(error.response.data.message)
+        }
+    }
+)

@@ -53,7 +53,7 @@ const NoticesFilters = () => {
   return (
     <div className="my-10 rounded-[30px] bg-[#fff4df] p-5 md:py-10 md:px-8">
       <ul className="flex flex-wrap gap-3 md:gap-4 pb-5 border-b border-b-black-main border-opacity-10">
-        <li>
+        <li className="w-full md:w-[265px]">
           <SearchField />
         </li>
         <li className="relative w-[50%] md:w-[170px] xl:w-[200px]">
@@ -72,7 +72,7 @@ const NoticesFilters = () => {
           </select>
           <svg
             className={clsx(
-              "absolute top-3 right-3 w-[18px] h-[18px] pointer-events-none",
+              "absolute top-3 md:top-4 right-3 w-[18px] h-[18px] pointer-events-none",
               isOpenMenu && "rotate-180"
             )}
           >
@@ -94,14 +94,14 @@ const NoticesFilters = () => {
           </select>
           <svg
             className={clsx(
-              "absolute top-3 right-3 w-[18px] h-[18px] pointer-events-none",
+              "absolute top-3 md:top-4 right-3 w-[18px] h-[18px] pointer-events-none",
               isOpenMenu && "rotate-180"
             )}
           >
             <use href={sprite + "#icon-chevron-down"} />
           </svg>
         </li>
-        <li>
+        <li className="relative">
           <select
             className="w-full md:w-[190px] p-3 md:p-[14px] rounded-[30px] bg-white outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] appearance-none"
             name="type"
@@ -114,6 +114,14 @@ const NoticesFilters = () => {
                 </option>
               ))}
           </select>
+          <svg
+            className={clsx(
+              "absolute top-3 md:top-4 right-3 w-[18px] h-[18px] pointer-events-none",
+              isOpenMenu && "rotate-180"
+            )}
+          >
+            <use href={sprite + "#icon-chevron-down"} />
+          </svg>
         </li>
         <li>
           <Select options={options} placeholder="Location" />

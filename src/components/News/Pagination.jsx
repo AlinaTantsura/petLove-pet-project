@@ -1,12 +1,15 @@
 /* eslint-disable react/prop-types */
+import { useSelector } from "react-redux";
 import sprite from "../../assets/images/sprite.svg";
 import clsx from "clsx";
+import { selectLastPage } from "../../redux/selectors";
 
-const Pagination = ({ setPage, page, lastPage }) => {
-
+const Pagination = ({ setPage, page }) => {
+  const lastPage = useSelector(selectLastPage);
   const handleChangePage = (e) => {
-    setPage(Number(e.target.innerText))
-  } 
+    setPage(Number(e.target.innerText));
+  };
+  if(lastPage < 2) return null
   return (
     <div className="mt-[44px] md:mt-[88px] mb-[60px] md:mb-[48px] flex justify-center gap-[11px] md:gap-[24px]">
       <div className="flex gap-[6px] md:gap-2">
@@ -56,20 +59,26 @@ const Pagination = ({ setPage, page, lastPage }) => {
       <div className="flex gap-[10px]">
         <div
           className={clsx(
-            "w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 flex justify-center items-center text-[16px] md:text-[20px] md:leading-[110%]",
-            lastPage <= 3 && page < lastPage - 2 && "hidden",
-            lastPage <= 4 && page < lastPage - 2 && "md:hidden",
+            "flex justify-center items-center w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 text-[16px] md:text-[20px] md:leading-[110%]",
+            lastPage <= 3 || (page < lastPage - 2 && "hidden"),
+            lastPage <= 4 || (page < lastPage - 3 && "md:hidden")
           )}
         >
           ...
         </div>
         {page === lastPage && (
-          <button onClick={handleChangePage} className="w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]">
+          <button
+            onClick={handleChangePage}
+            className="w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 hidden md:flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]"
+          >
             {page - 2}
           </button>
         )}
         {(page === lastPage - 1 || page === lastPage) && (
-          <button onClick={handleChangePage} className="w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]">
+          <button
+            onClick={handleChangePage}
+            className="w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]"
+          >
             {page - 1}
           </button>
         )}
@@ -77,16 +86,25 @@ const Pagination = ({ setPage, page, lastPage }) => {
           {page}
         </div>
         {page === lastPage - 1 && (
-          <button onClick={handleChangePage} className="w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]">
+          <button
+            onClick={handleChangePage}
+            className="w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]"
+          >
             {page + 1}
           </button>
         )}
         {page !== lastPage && page !== lastPage - 1 && (
           <>
-            <button onClick={handleChangePage} className="w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]">
+            <button
+              onClick={handleChangePage}
+              className="w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]"
+            >
               {page + 1}
             </button>
-            <button onClick={handleChangePage} className="hidden w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 md:flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]">
+            <button
+              onClick={handleChangePage}
+              className="hidden w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 md:flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]"
+            >
               {page + 2}
             </button>
           </>

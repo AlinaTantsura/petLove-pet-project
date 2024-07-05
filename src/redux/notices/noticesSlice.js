@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCategories, getCities, getPetSex, getPetType } from "./noticesOperations";
+import { getCategories, getCities, getNotices, getPetSex, getPetType } from "./noticesOperations";
 
 const noticesSlice = createSlice({
     name: "notices",
     initialState: {
+        notices: [],
         categories: null,
         petSex: null,
         types: null,
@@ -22,6 +23,9 @@ const noticesSlice = createSlice({
         builder.addCase(getCities.fulfilled, (state, actions) => {
             state.cities = actions.payload
         });
+        builder.addCase(getNotices.fulfilled, (state, actions) => {
+            state.notices = actions.payload.results;
+        })
     }
 });
 
