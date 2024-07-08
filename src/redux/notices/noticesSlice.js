@@ -5,6 +5,7 @@ const noticesSlice = createSlice({
     name: "notices",
     initialState: {
         notices: [],
+        lastPage: null,
         categories: null,
         petSex: null,
         types: null,
@@ -25,6 +26,7 @@ const noticesSlice = createSlice({
         });
         builder.addCase(getNotices.fulfilled, (state, actions) => {
             state.notices = actions.payload.results;
+            state.lastPage = actions.payload.totalPages;
         })
     }
 });

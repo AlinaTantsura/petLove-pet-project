@@ -1,9 +1,19 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react";
 import sprite from "../../assets/images/sprite.svg";
 import Button from "../Button";
+import ModalAttention from "./ModalAttention";
+import ModalNotice from "./ModalNotice";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/auth/authSelectors";
 
 const NoticesItem = ({ data }) => {
+  const [open, setOpen] = useState(false);
+  const { token } = useSelector(selectUser);
+  const isLogin = Boolean(token);
+
   return (
+    <>
     <div className="bg-white rounded-[16px] p-6">
       <div className="mb-6 w-full h-[178px] rounded-[16px] bg-white overflow-hidden">
        <img src={data.imgURL} alt={data.title} className="translate-y-[-20%]" />
@@ -55,7 +65,7 @@ const NoticesItem = ({ data }) => {
         </p>
         <div className="flex gap-[10px]">
           {/* <Button className="px-[81px] md:px-[90px] xl:px-[79px] py-[13px] md:py-[12px] rounded-[30px] bg-orange-main text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] text-white"> */}
-          <Button className="w-full py-[14px] rounded-[30px] bg-orange-main text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] text-white">
+          <Button onClick={()=>setOpen(true)} className="w-full py-[14px] rounded-[30px] bg-orange-main text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] text-white">
             Learn more
           </Button>
           <Button className="rounded-full bg-[#fff4df] min-w-[46px] h-[46px] md:min-w-[48px] md:h-[48px] flex justify-center items-center">
@@ -65,7 +75,12 @@ const NoticesItem = ({ data }) => {
           </Button>
         </div>
       </div>
-    </div>
+      </div>
+      {isLogin ?
+        (<ModalNotice onClose={() => setOpen(false)} open={open} data={data} />)
+          :(<ModalAttention onClose={()=>setOpen(false)} open={open} /> )}
+    
+      </>
   );
 };
 

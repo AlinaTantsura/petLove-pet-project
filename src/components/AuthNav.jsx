@@ -23,7 +23,7 @@ const AuthNav = ({ isHome, isHeader }) => {
           )}
         >
           <Button
-            onClick={() => dispatch(logoutUser()) }
+            onClick={() => dispatch(logoutUser())}
             className={clsx(
               "w-full md:w-auto px-[35px] py-[15px] rounded-[30px] bg-orange-main hover:bg-[#f9b020] font-bold text-white text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]",
               isHome && isHeader && "hidden",

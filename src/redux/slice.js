@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCategories, getCities, getNotices, getPetSex, getPetType } from "./notices/noticesOperations";
-import { getNews } from "./news/newsOperations";
+import { getCategories, getCities, getPetSex, getPetType } from "./notices/noticesOperations";
 import { loginUser, logoutUser, registerUser } from "./auth/authOperations";
 import { getOurFriends } from "./ourFriends/ourFriendsOpertions";
 
@@ -8,11 +7,16 @@ const commonSlice = createSlice({
     name: "common",
     initialState: {
         searchWord: "",
-        lastPage: null,
         error: null,
         isLoading: false,
     },
     reducers: {
+        handleLoadingFalse(state) {
+          state.isLoading = false  
+        },
+        handleLoadingTrue(state) {
+          state.isLoading = true  
+        },
         changeSearchWord(state, actions) {
             state.searchWord = actions.payload
         }
@@ -66,32 +70,30 @@ const commonSlice = createSlice({
             state.isLoading = false;
             state.error = actions.payload;
         });
-        builder.addCase(getNews.pending, (state) => {
-            state.isLoading = true;
-            state.error = null;
-        });
-        builder.addCase(getNews.fulfilled, (state, actions) => {
-            state.isLoading = false;
-            state.error = null;
-            state.lastPage = actions.payload.totalPages;
-        });
-        builder.addCase(getNews.rejected, (state, actions) => {
-            state.isLoading = false;
-            state.error = actions.payload;
-        }); 
-        builder.addCase(getNotices.pending, (state) => {
-            state.isLoading = true;
-            state.error = null;
-        });
-        builder.addCase(getNotices.fulfilled, (state, actions) => {
-            state.isLoading = false;
-            state.error = null;
-            state.lastPage = actions.payload.totalPages;
-        });
-        builder.addCase(getNotices.rejected, (state, actions) => {
-            state.isLoading = false;
-            state.error = actions.payload;
-        }); 
+        // builder.addCase(getNews.pending, (state) => {
+        //     state.isLoading = true;
+        //     state.error = null;
+        // });
+        // builder.addCase(getNews.fulfilled, (state) => {
+        //     state.isLoading = false;
+        //     state.error = null;
+        // });
+        // builder.addCase(getNews.rejected, (state, actions) => {
+        //     state.isLoading = false;
+        //     state.error = actions.payload;
+        // }); 
+        // builder.addCase(getNotices.pending, (state) => {
+        //     state.isLoading = true;
+        //     state.error = null;
+        // });
+        // builder.addCase(getNotices.fulfilled, (state) => {
+        //     state.isLoading = false;
+        //     state.error = null;
+        // });
+        // builder.addCase(getNotices.rejected, (state, actions) => {
+        //     state.isLoading = false;
+        //     state.error = actions.payload;
+        // }); 
         builder.addCase(getCategories.pending, (state) => {
             state.isLoading = true;
             state.error = null;

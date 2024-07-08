@@ -1,11 +1,8 @@
 /* eslint-disable react/prop-types */
-import { useSelector } from "react-redux";
 import sprite from "../../assets/images/sprite.svg";
 import clsx from "clsx";
-import { selectLastPage } from "../../redux/selectors";
 
-const Pagination = ({ setPage, page }) => {
-  const lastPage = useSelector(selectLastPage);
+const Pagination = ({ setPage, page, lastPage }) => {
   const handleChangePage = (e) => {
     setPage(Number(e.target.innerText));
   };

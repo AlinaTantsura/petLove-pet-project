@@ -4,26 +4,26 @@ import NewsList from "../components/News/NewsList.jsx";
 import Pagination from "../components/News/Pagination.jsx";
 import SearchField from "../components/News/SearchField.jsx";
 import Title from "../components/Title.jsx";
-import { selectNews } from "../redux/news/newsSelectors.js";
+import { selectLastPage, selectNews } from "../redux/news/newsSelectors.js";
 import { getNews } from "../redux/news/newsOperations.js";
-import { selectSearchWord } from "../redux/selectors.js";
+// import { selectSearchWord } from "../redux/selectors.js";
 
 const Newspage = () => {
   const [page, setPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   const newsList = useSelector(selectNews);
-  const searchWord = useSelector(selectSearchWord);
+  const lastPage = useSelector(selectLastPage)
+  // const searchWord = useSelector(selectSearchWord);
   // console.log(searchWord)
     
   useEffect(() => {
-    if (newsList.length === 0 || currentPage !== page || searchWord) {
-      console.log("Is dispatch?")
-        dispatch(getNews({page, searchWord}));
+    if (newsList.length === 0 || currentPage !== page) {
+      dispatch(getNews(page));
         setCurrentPage(page)
     }
-  }, [dispatch, newsList, page, currentPage, searchWord]);
-
+  }, [dispatch, newsList, page, currentPage]);
+console.log(page)
   // console.log(searchWord)
   return (
     <div className="mt-[34px] md:mt-[53px] xl:mt-[64px] xl:px-8">
@@ -34,7 +34,7 @@ const Newspage = () => {
         </div>
       </div>
       <NewsList newsList={newsList} />
-      <Pagination setPage={setPage} page={page}/>
+      <Pagination setPage={setPage} page={page} lastPage={lastPage}/>
     </div>
   );
 };
