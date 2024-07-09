@@ -3,12 +3,11 @@ import ModalWindow from "../ModalWindow";
 import sprite from "../../assets/images/sprite.svg"
 import Button from "../Button";
 
-const changeBirthdayFormat = (birthday) => {
-    return birthday.split("-").reverse().join(".")
-}
-
-const ModalNotice = ({ onClose, open, data }) => {
-    console.log(data)
+const ModalNotice = ({ onClose, open, data, isFavorite, setAddId, setDeleteId }) => {
+    const handleFavorites = () => {
+        if (isFavorite) setDeleteId(data._id)
+        else setAddId(data._id)
+    }
   return (
       <ModalWindow onClose={onClose} open={open}>
           <div className="w-[335px] md:w-[473px] px-5 py-10 flex flex-col items-center ">
@@ -46,7 +45,7 @@ const ModalNotice = ({ onClose, open, data }) => {
                       <span className="text-[10px] leading-[140%] opacity-50">
                           Birthday
                       </span>
-                      {changeBirthdayFormat(data.birthday)}
+                      {data.birthday.split("-").reverse().join(".")}
                   </li>
                   <li className="text-[12px] leading-[117%] tracking-[-0.02em] flex flex-col justify-center items-center gap-1">
                       <span className="text-[10px] leading-[140%] opacity-50">
@@ -65,7 +64,7 @@ const ModalNotice = ({ onClose, open, data }) => {
                  {data.comment} 
               </p>
               <div className="flex gap-[10px]">
-                  <Button className="bg-orange-main rounded-[30px] px-[31px] md:px-[42px] py-3 md:py-[14px] flex gap-2 items-center text-white text-[16px]">Add to
+                  <Button onClick={handleFavorites} className="bg-orange-main w-[135px] md:w-[160px] rounded-[30px] py-3 md:py-[14px] flex gap-2 items-center justify-center text-white text-[16px]">{!isFavorite ? "Add to" : "Remove from"}
                       <svg className="w-[18px] h-[18px] stroke-white fill-none">
                           <use href={sprite + "#icon-heart-white"} />
                       </svg>

@@ -70,18 +70,7 @@ const commonSlice = createSlice({
             state.isLoading = false;
             state.error = actions.payload;
         });
-        // builder.addCase(getNews.pending, (state) => {
-        //     state.isLoading = true;
-        //     state.error = null;
-        // });
-        // builder.addCase(getNews.fulfilled, (state) => {
-        //     state.isLoading = false;
-        //     state.error = null;
-        // });
-        // builder.addCase(getNews.rejected, (state, actions) => {
-        //     state.isLoading = false;
-        //     state.error = actions.payload;
-        // }); 
+        
         // builder.addCase(getNotices.pending, (state) => {
         //     state.isLoading = true;
         //     state.error = null;

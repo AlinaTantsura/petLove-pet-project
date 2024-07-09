@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import Button from "./Button";
 import sprite from "../assets/images/sprite.svg";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../redux/auth/authSelectors";
@@ -32,7 +32,7 @@ const AuthNav = ({ isHome, isHeader }) => {
           >
             LOG OUT
           </Button>
-          <div
+          <Link to="/profile"
             className={clsx(
               "flex gap-2 items-center",
               !isHeader && "md:hidden"
@@ -51,7 +51,7 @@ const AuthNav = ({ isHome, isHeader }) => {
             >
               Name
             </p>
-          </div>
+          </Link>
         </div>
       ) : (
         <div className="flex flex-col md:flex-row gap-2 items-center justify-center xl:ml-[142px]">

@@ -3,9 +3,9 @@ import axios from 'axios';
 
 export const getNews = createAsyncThunk(
     "news/getNews",
-    async (page, thunkAPI) => {
+    async ({page, keyword}, thunkAPI) => {
         try {
-            const resp = await axios.get(`/news?page=${page}`);
+            const resp = await axios.get(`/news?page=${page || 1}&keyword=${keyword || ""}`);
             // console.log(resp.data)
             return resp.data;
         } catch (error) {

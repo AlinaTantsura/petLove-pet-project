@@ -2,14 +2,12 @@
 import clsx from "clsx";
 import sprite from "../../assets/images/sprite.svg";
 import { useState } from "react";
-import { changeSearchWord } from "../../redux/slice";
 
-const SearchField = ({ isNews = false }) => {
+const SearchField = ({ isNews = false, setSearchWord}) => {
   const [searchCurrent, setSearchCurrent] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(e.target.elements.search.value)
-    changeSearchWord(e.target.elements.search.value);
+    setSearchWord(e.target.elements.search.value);
   };
 
   return (
@@ -31,14 +29,14 @@ const SearchField = ({ isNews = false }) => {
           onClick={() => {
             setSearchCurrent("");
           }}
-          className="w-[18px] h-[18px] absolute top-[13px] md:top-[14px] right-[34px] md:right-[40px]"
+          className="w-[18px] h-[18px] absolute top-[13px] md:top-[16px] right-[34px] md:right-[40px]"
         >
           <svg className="w-full h-full stroke-black-main">
             <use href={sprite + "#icon-x"} />
           </svg>
         </button>
       )}
-      <button  className="w-[18px] h-[18px] absolute top-[13px] md:top-[14px] right-3 md:right-[14px]">
+      <button className="w-[18px] h-[18px] absolute top-[13px] md:top-[16px] right-3 md:right-[14px]">
         <svg className="w-full h-full">
           <use href={sprite + "#icon-search"} />
         </svg>

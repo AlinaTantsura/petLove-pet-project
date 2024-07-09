@@ -51,7 +51,6 @@ export const logoutUser = createAsyncThunk(
     "user/logout",
     async (_, thunkAPI) => {
         try {
-            console.log(axios.defaults.headers.common.Authorization)
             await axios.post('/users/signout')
             clearAuthToken();
         } catch (error) {
@@ -59,3 +58,15 @@ export const logoutUser = createAsyncThunk(
         }
     }
 )
+
+export const getCurrentUser = createAsyncThunk(
+    "user/getCurrent",
+    async (_, thunkAPI) => {
+        try {
+            const resp = await axios.get('/users/current')
+            return resp.data.noticesFavorites
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data.message)
+        }
+    }
+);
