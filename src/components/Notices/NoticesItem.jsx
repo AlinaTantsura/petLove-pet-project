@@ -14,7 +14,7 @@ const NoticesItem = ({ data, isFavorite, setAddId, setDeleteId }) => {
 
   return (
     <>
-      <div className="bg-white rounded-[16px] p-6">
+      <div className="relative h-[430px] md:h-[444px] bg-white rounded-[16px] p-6">
         <div className="mb-6 w-full h-[178px] rounded-[16px] bg-white overflow-hidden">
           <img
             src={data.imgURL}
@@ -43,7 +43,7 @@ const NoticesItem = ({ data, isFavorite, setAddId, setDeleteId }) => {
               <span className="text-[10px] leading-[140%] text-opacity-black">
                 Birthday
               </span>
-              {data.birthday.split("-").reverse().join(".")}
+              {data.birthday?.split("-").reverse().join(".") || "Unknown"}
             </li>
             <li className="flex flex-col gap-1">
               <span className="text-[10px] leading-[140%] text-opacity-black">
@@ -64,10 +64,11 @@ const NoticesItem = ({ data, isFavorite, setAddId, setDeleteId }) => {
               {data.category[0].toUpperCase() + data.category.slice(1)}
             </li>
           </ul>
-          <p className="h-[60px] md:h-[78px] text-[14px] leading-[129%] tracking-[-0.02em] text-[#2b2b2a]">
+          {/* <p className="h-[60px] md:h-[78px] text-[14px] leading-[129%] tracking-[-0.02em] text-[#2b2b2a]"> */}
+          <p className="text-[14px] leading-[129%] tracking-[-0.02em] text-[#2b2b2a]">
             {data.comment}
           </p>
-          <div className="flex gap-[10px]">
+          <div className="absolute bottom-6 w-[calc(100%-48px)] flex gap-[10px]">
             <Button
               onClick={() => setOpen(true)}
               className="w-full py-[14px] rounded-[30px] bg-orange-main text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] text-white"

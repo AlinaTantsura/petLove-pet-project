@@ -6,7 +6,7 @@ const Pagination = ({ setPage, page, lastPage }) => {
   const handleChangePage = (e) => {
     setPage(Number(e.target.innerText));
   };
-  if(lastPage < 2) return null
+  if (lastPage < 2) return null;
   return (
     <div className="mt-[44px] md:mt-[88px] mb-[60px] md:mb-[48px] flex justify-center gap-[11px] md:gap-[24px]">
       <div className="flex gap-[6px] md:gap-2">
@@ -57,8 +57,8 @@ const Pagination = ({ setPage, page, lastPage }) => {
         <div
           className={clsx(
             "flex justify-center items-center w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 text-[16px] md:text-[20px] md:leading-[110%]",
-            lastPage <= 3 || (page < lastPage - 2 && "hidden"),
-            lastPage <= 4 || (page < lastPage - 3 && "md:hidden")
+            (lastPage < 3 || page < lastPage - 2) && "hidden",
+            (lastPage < 4 || page < lastPage - 3) && "md:hidden"
           )}
         >
           ...
@@ -66,7 +66,10 @@ const Pagination = ({ setPage, page, lastPage }) => {
         {page === lastPage && (
           <button
             onClick={handleChangePage}
-            className="w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 hidden md:flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]"
+            className={clsx("w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 hidden md:flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]",
+              (lastPage < 3) && "hidden",
+              (lastPage < 4) && "md:hidden"
+            )}
           >
             {page - 2}
           </button>
@@ -74,7 +77,11 @@ const Pagination = ({ setPage, page, lastPage }) => {
         {(page === lastPage - 1 || page === lastPage) && (
           <button
             onClick={handleChangePage}
-            className="w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]"
+            className={clsx(
+              "w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]",
+              (lastPage < 3 && page === 1) && "hidden",
+              (lastPage < 4 && page === 1) && "md:hidden"
+            )}
           >
             {page - 1}
           </button>

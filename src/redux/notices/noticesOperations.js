@@ -55,9 +55,9 @@ export const getCities = createAsyncThunk(
 
 export const getNotices = createAsyncThunk(
     "notices/getNotices",
-    async (page, thunkAPI) => {
+    async ({page, keyword}, thunkAPI) => {
         try {
-            const resp = await axios.get(`/notices?page=${page}`);
+            const resp = await axios.get(`/notices?page=${page || 1}&keyword=${keyword || ''}`);
             return resp.data
         } catch (error) {
             console.log(error);

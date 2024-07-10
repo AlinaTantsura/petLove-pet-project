@@ -5,13 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectNews } from "../../redux/news/newsSelectors";
 import { getNews } from "../../redux/news/newsOperations";
 
-const NewsList = ({ page, searchWord}) => {
+const NewsList = ({ page, searchWord, setPage}) => {
   const dispatch = useDispatch();
   const newsList = useSelector(selectNews);
-  console.log(newsList)
+
+  useEffect(() => {
+    setPage(1)
+  },[searchWord, setPage])
 
     useEffect(() => {
-      console.log(searchWord)
         dispatch(getNews({page,keyword:searchWord}))
 
     }, [dispatch, searchWord, page]);

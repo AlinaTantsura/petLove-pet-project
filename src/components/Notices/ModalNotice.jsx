@@ -45,7 +45,7 @@ const ModalNotice = ({ onClose, open, data, isFavorite, setAddId, setDeleteId })
                       <span className="text-[10px] leading-[140%] opacity-50">
                           Birthday
                       </span>
-                      {data.birthday.split("-").reverse().join(".")}
+                      {data.birthday?.split("-").reverse().join(".") || "Unknown"}
                   </li>
                   <li className="text-[12px] leading-[117%] tracking-[-0.02em] flex flex-col justify-center items-center gap-1">
                       <span className="text-[10px] leading-[140%] opacity-50">
