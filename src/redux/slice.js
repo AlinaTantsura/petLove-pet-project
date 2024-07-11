@@ -6,20 +6,8 @@ import { getOurFriends } from "./ourFriends/ourFriendsOpertions";
 const commonSlice = createSlice({
     name: "common",
     initialState: {
-        searchWord: "",
         error: null,
         isLoading: false,
-    },
-    reducers: {
-        handleLoadingFalse(state) {
-          state.isLoading = false  
-        },
-        handleLoadingTrue(state) {
-          state.isLoading = true  
-        },
-        changeSearchWord(state, actions) {
-            state.searchWord = actions.payload
-        }
     },
     extraReducers: builder => {
         builder.addCase(registerUser.pending, (state) => {
@@ -70,18 +58,7 @@ const commonSlice = createSlice({
             state.isLoading = false;
             state.error = actions.payload;
         });
-        builder.addCase(getCategories.pending, (state) => {
-            state.isLoading = true;
-            state.error = null;
-        });
-        builder.addCase(getCategories.fulfilled, (state) => {
-            state.isLoading = false;
-            state.error = null;
-        });
-        builder.addCase(getCategories.rejected, (state, actions) => {
-            state.isLoading = false;
-            state.error = actions.payload;
-        }); 
+        
         builder.addCase(getPetSex.pending, (state) => {
             state.isLoading = true;
             state.error = null;

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Select from "react-select";
 import {
   getCategories,
-  getCities,
+  // getCities,
   getPetSex,
   getPetType,
 } from "../../redux/notices/noticesOperations";
@@ -16,15 +16,18 @@ import {
   selectCities,
   selectPetSex,
   selectPetTypes,
+  selectSexValue,
 } from "../../redux/notices/noticesSelectors";
 import clsx from "clsx";
+import { changeSexValue } from "../../redux/notices/noticesSlice";
 
-const NoticesFilters = ({ setSearchWord }) => {
+const NoticesFilters = ({ setSearchWord, setCategory, category, type, setType }) => {
   const dispatch = useDispatch();
   const categories = useSelector(selectCategories);
   const petSex = useSelector(selectPetSex);
   const petTypes = useSelector(selectPetTypes);
   const cities = useSelector(selectCities);
+  const gender = useSelector(selectSexValue);
   const [sortWord, setSortWord] = useState("");
   const radioButtons = [
     { value: "popular", label: "Popular" },
@@ -34,10 +37,7 @@ const NoticesFilters = ({ setSearchWord }) => {
   ];
   const [isOpenCategories, setIsOpenCategories] = useState(false);
   const [isOpenGenders, setIsOpenGenders] = useState(false);
-  const [isOpenTypes, setIsOpenTypes] = useState(false);
-  const [categoryValue, setCategoryValue] = useState("all"); 
-  const [genderValue, setGenderValue] = useState("all"); 
-  const [typeValue, setTypeValue] = useState("all");
+  const [isOpenTypes, setIsOpenTypes] = useState(false); 
 
   useEffect(() => {
     if (!categories) {
@@ -57,24 +57,23 @@ const NoticesFilters = ({ setSearchWord }) => {
   }));
 
   const handleSelectCategory = (value) => {
-    if (value !== categoryValue) {
+    if (value !== category) {
       setIsOpenCategories(false);
-      setCategoryValue(value);
+      setCategory(value)
     }
   };
   const handleSelectGender = (value) => {
-    if (value !== genderValue) {
+    if (value !== gender) {
       setIsOpenGenders(false);
-      setGenderValue(value);
+      dispatch(changeSexValue(value));
     }
   };
   const handleSelectType = (value) => {
-    if (value !== typeValue) {
+    if (value !== type) {
       setIsOpenTypes(false);
-      setTypeValue(value);
+      setType(value);
     }
   };
-  // console.log(categoryValue);
   // console.log(sortWord)
   return (
     <div className="my-10 rounded-[30px] bg-[#fff4df] p-5 md:py-10 md:px-8">
@@ -88,9 +87,9 @@ const NoticesFilters = ({ setSearchWord }) => {
             className="p-3 md:p-[14px] flex-1 rounded-[30px] w-full bg-white outline-none placeholder:text-black-main text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] cursor-pointer text-start"
           >
             {
-              categoryValue === "all"
+              category === "all"
                 ? "Category"
-                : categoryValue[0].toUpperCase() + categoryValue.slice(1)
+                : category[0].toUpperCase() + category.slice(1)
             }
           </button>
           {isOpenCategories && (
@@ -99,22 +98,22 @@ const NoticesFilters = ({ setSearchWord }) => {
                 onClick={() => handleSelectCategory("all")}
                 className={clsx(
                   "text-black-main text-opacity-60 cursor-pointer hover:font-bold",
-                  categoryValue === "all" && "text-orange-main hover:font-normal"
+                  category === "all" && "text-orange-main"
                 )}
               >
                 Show all
               </li>
               {categories &&
-                categories.map((category) => (
+                categories.map((categoryItem) => (
                   <li
-                    onClick={() => handleSelectCategory(category)}
+                    onClick={() => handleSelectCategory(categoryItem)}
                     className={clsx(
                       "text-black-main text-opacity-60 cursor-pointer hover:font-bold",
-                      categoryValue === category && "text-orange-main hover:font-normal"
+                      categoryItem === category && "text-orange-main"
                     )}
-                    key={category}
+                    key={categoryItem}
                   >
-                    {category[0].toUpperCase() + category.slice(1)}
+                    {categoryItem[0].toUpperCase() + categoryItem.slice(1)}
                   </li>
                 ))}
             </ul>
@@ -134,9 +133,9 @@ const NoticesFilters = ({ setSearchWord }) => {
             className="p-3 md:p-[14px] flex-1 rounded-[30px] w-full bg-white outline-none placeholder:text-black-main text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] cursor-pointer text-start"
           >
             {
-              genderValue === "all"
+              gender === "all"
                 ? "By gender"
-                : genderValue[0].toUpperCase() + genderValue.slice(1)
+                : gender[0].toUpperCase() + gender.slice(1)
             }
           </button>
           {isOpenGenders && (
@@ -145,7 +144,7 @@ const NoticesFilters = ({ setSearchWord }) => {
                 onClick={() => handleSelectGender("all")}
                 className={clsx(
                   "text-black-main text-opacity-60 cursor-pointer hover:font-bold",
-                  categoryValue === "all" && "text-orange-main hover:font-normal"
+                  gender === "all" && "text-orange-main"
                 )}
               >
                 Show all
@@ -156,7 +155,7 @@ const NoticesFilters = ({ setSearchWord }) => {
                     onClick={() => handleSelectGender(sex)}
                     className={clsx(
                       "text-black-main text-opacity-60 cursor-pointer hover:font-bold",
-                      genderValue === sex && "text-orange-main hover:font-normal"
+                      gender === sex && "text-orange-main"
                     )}
                     key={sex}
                   >
@@ -180,36 +179,40 @@ const NoticesFilters = ({ setSearchWord }) => {
             className="p-3 md:p-[14px] flex-1 rounded-[30px] w-full bg-white outline-none placeholder:text-black-main text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] cursor-pointer text-start"
           >
             {
-              typeValue === "all"
+              type === "all"
                 ? "By type"
-                : typeValue[0].toUpperCase() + typeValue.slice(1)
+                : type[0].toUpperCase() + type.slice(1)
             }
           </button>
           {isOpenTypes && (
-            <ul className="absolute z-10 top-[45px] md:top-[52px] w-full h-[216px] overflow-scroll rounded-[15px] bg-white p-3 md:p-[14px] flex flex-col gap-2 text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]">
+            <div className="absolute z-10 top-[45px] md:top-[52px] w-full h-[216px] rounded-[15px] bg-white p-3 md:p-[14px] ">
+            <ul className={clsx("h-full overflow-scroll flex flex-col gap-2 text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]",
+              "types-menu"
+            )}>
               <li
                 onClick={() => handleSelectType("all")}
                 className={clsx(
                   "text-black-main text-opacity-60 cursor-pointer hover:font-bold",
-                  typeValue === "all" && "text-orange-main hover:font-normal"
+                  type === "all" && "text-orange-main"
                 )}
               >
                 Show all
               </li>
               {petTypes &&
-                petTypes.map((type) => (
+                petTypes.map((typeItem) => (
                   <li
-                    onClick={() => handleSelectType(type)}
+                    onClick={() => handleSelectType(typeItem)}
                     className={clsx(
                       "text-black-main text-opacity-60 cursor-pointer hover:font-bold",
-                      typeValue === type && "text-orange-main hover:font-normal"
+                      type === typeItem && "text-orange-main",
                     )}
-                    key={type}
+                    key={typeItem}
                   >
-                    {type[0].toUpperCase() + type.slice(1)}
+                    {typeItem[0].toUpperCase() + typeItem.slice(1)}
                   </li>
                 ))}
             </ul>
+             </div>   
           )}
           <svg
             className={clsx(
@@ -220,54 +223,11 @@ const NoticesFilters = ({ setSearchWord }) => {
             <use href={sprite + "#icon-chevron-down"} />
           </svg>
         </li>
-        {/* <li className="relative w-[143px] md:w-[170px] xl:w-[190px]">
-          <select
-            className="p-3 md:p-[14px] flex-1 rounded-[30px] w-full bg-white outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] appearance-none"
-            name="gender"
-          >
-            <option value="">By gender</option>
-            {petSex &&
-              petSex.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-          </select>
-          <svg
-            className={clsx(
-              "absolute top-3 md:top-4 right-3 w-[18px] h-[18px] pointer-events-none"
-              // isOpenMenu && "rotate-180"
-            )}
-          >
-            <use href={sprite + "#icon-chevron-down"} />
-          </svg>
-        </li>
-        <li className="relative">
-          <select
-            className="w-full md:w-[190px] p-3 md:p-[14px] rounded-[30px] bg-white outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] appearance-none"
-            name="type"
-          >
-            <option value="">By type</option>
-            {petTypes &&
-              petTypes.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-          </select>
-          <svg
-            className={clsx(
-              "absolute top-3 md:top-4 right-3 w-[18px] h-[18px] pointer-events-none"
-              // isOpenMenu && "rotate-180"
-            )}
-          >
-            <use href={sprite + "#icon-chevron-down"} />
-          </svg>
-        </li> */}
         <li>
           <Select options={options} placeholder="Location" />
         </li>
       </ul>
+      
       <ul className="mt-5 flex flex-wrap gap-[10px]">
         {radioButtons.map((btn) => (
           <li key={btn.value}>

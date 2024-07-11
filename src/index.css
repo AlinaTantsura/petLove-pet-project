@@ -29,3 +29,23 @@ ul, li{
 h1, h2, h3, h4, h5, h6, p, span, a{
   color: #262626;
 }
+
+.types-menu::-webkit-scrollbar{
+  background-color: white;
+  width: 8px;
+  /* height: 100px; */
+
+}
+.types-menu::-webkit-scrollbar-track{
+  background-color: white;
+
+}
+.types-menu::-webkit-scrollbar-thumb{
+  background-color: rgba(38, 38, 38, 0.08);
+  border-radius: 13px;
+  height: 100px;
+}
+
+.types-menu::-webkit-scrollbar:horizontal {
+  display: none;
+}

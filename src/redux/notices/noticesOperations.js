@@ -2,90 +2,111 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const getCategories = createAsyncThunk(
-    "notices/getCategories",
-    async (_, thunkAPI) => {
-        try {
-            const resp = await axios.get("/notices/categories");
-            return resp.data
-        } catch (error) {
-            console.log(error);
-            thunkAPI.rejectWithValue(error.response.data.message)
-        }
+  "notices/getCategories",
+  async (_, thunkAPI) => {
+    try {
+      const resp = await axios.get("/notices/categories");
+      return resp.data;
+    } catch (error) {
+      console.log(error);
+      thunkAPI.rejectWithValue(error.response.data.message);
     }
-)
+  }
+);
 
 export const getPetSex = createAsyncThunk(
-    "notices/getPetSex",
-    async (_, thunkAPI) => {
-        try {
-            const resp = await axios.get("/notices/sex");
-            return resp.data
-        } catch (error) {
-            console.log(error);
-            thunkAPI.rejectWithValue(error.response.data.message)
-        }
+  "notices/getPetSex",
+  async (_, thunkAPI) => {
+    try {
+      const resp = await axios.get("/notices/sex");
+      return resp.data;
+    } catch (error) {
+      console.log(error);
+      thunkAPI.rejectWithValue(error.response.data.message);
     }
-)
+  }
+);
 
 export const getPetType = createAsyncThunk(
-    "notices/getPetType",
-    async (_, thunkAPI) => {
-        try {
-            const resp = await axios.get("/notices/species");
-            return resp.data
-        } catch (error) {
-            console.log(error);
-            thunkAPI.rejectWithValue(error.response.data.message)
-        }
+  "notices/getPetType",
+  async (_, thunkAPI) => {
+    try {
+      const resp = await axios.get("/notices/species");
+      return resp.data;
+    } catch (error) {
+      console.log(error);
+      thunkAPI.rejectWithValue(error.response.data.message);
     }
-)
+  }
+);
 
 export const getCities = createAsyncThunk(
-    "notices/getCities",
-    async (_, thunkAPI) => {
-        try {
-            const resp = await axios.get("/cities");
-            return resp.data
-        } catch (error) {
-            console.log(error);
-            thunkAPI.rejectWithValue(error.response.data.message)
-        }
+  "notices/getCities",
+  async (_, thunkAPI) => {
+    try {
+      const resp = await axios.get("/cities");
+      return resp.data;
+    } catch (error) {
+      console.log(error);
+      thunkAPI.rejectWithValue(error.response.data.message);
     }
-)
+  }
+);
 
 export const getNotices = createAsyncThunk(
-    "notices/getNotices",
-    async ({page, keyword}, thunkAPI) => {
-        try {
-            const resp = await axios.get(`/notices?page=${page || 1}&keyword=${keyword || ''}`);
-            return resp.data
-        } catch (error) {
-            console.log(error);
-            thunkAPI.rejectWithValue(error.response.data.message)
-        }
+  "notices/getNotices",
+  async ({ page, keyword, category, species }, thunkAPI) => {
+    try {
+      const resp = await axios.get(
+        `/notices?page=${page || 1}&keyword=${keyword || ""}&category=${
+          category === "all" ? "" : category
+        }&species=${species === "all" ? "" : species}`
+      );
+      return resp.data;
+    } catch (error) {
+      console.log(error);
+      thunkAPI.rejectWithValue(error.response.data.message);
     }
-)
+  }
+);
+
+export const getAllNotices = createAsyncThunk(
+  "notices/getAllNotices",
+  async ({ page, keyword, category, species, limit }, thunkAPI) => {
+    try {
+      const resp = await axios.get(
+        `/notices?page=${page || 1}&keyword=${keyword || ""}&category=${
+          category === "all" ? "" : category
+        }&species=${species === "all" ? "" : species}&limit=${limit}`
+      );
+      return resp.data;
+    } catch (error) {
+      console.log(error);
+      thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
 
 export const addFavoriteNotice = createAsyncThunk(
-    "notices/addFavoriteNotice",
-    async (id, thunkAPI) => {
-        try {
-            const resp = await axios.post(`/notices/favorites/add/${id}`);
-            return resp.data
-        } catch (error) {
-            return thunkAPI.rejectWithValue(error.response.data.message)
-        }
+  "notices/addFavoriteNotice",
+  async (id, thunkAPI) => {
+    try {
+      const resp = await axios.post(`/notices/favorites/add/${id}`);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
     }
-)
+  }
+);
 
 export const removeFavoriteNotice = createAsyncThunk(
-    "notices/removeFavoriteNotice",
-    async (id, thunkAPI) => {
-        try {
-            const resp = await axios.delete(`/notices/favorites/remove/${id}`)
-            return resp.data
-        } catch (error) {
-            return thunkAPI.rejectWithValue(error.response.data.message)
-        }
+  "notices/removeFavoriteNotice",
+  async (id, thunkAPI) => {
+    try {
+      const resp = await axios.delete(`/notices/favorites/remove/${id}`);
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
     }
-)
+  }
+);

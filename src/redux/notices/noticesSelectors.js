@@ -5,5 +5,6 @@ export const selectCities = state => state.notices.cities
 export const selectNotices = state => state.notices.notices
 export const selectFavoritesIds = state => state.notices.favIds
 export const selectLastPage = state => state.notices.lastPage
+export const selectSexValue = state => state.notices.sexValue
 export const selectIsLoading = state => state.notices.isLoading
 export const selectError = state => state.notices.error

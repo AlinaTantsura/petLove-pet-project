@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   addFavoriteNotice,
+  getAllNotices,
   getCategories,
   getCities,
   getNotices,
@@ -22,10 +23,29 @@ const noticesSlice = createSlice({
     cities: null,
     isLoading: false,
     error: null,
+    sexValue: "all",
+  },
+  reducers: {
+    changeLastPage(state, actions){
+      state.lastPage = actions.payload
+    },
+    changeSexValue(state, actions) {
+      state.sexValue = actions.payload
+    }
   },
   extraReducers: (builder) => {
+    builder.addCase(getCategories.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
     builder.addCase(getCategories.fulfilled, (state, actions) => {
+      state.isLoading = false;
+      state.error = null;
       state.categories = actions.payload;
+    });
+    builder.addCase(getCategories.rejected, (state, actions) => {
+      state.isLoading = false;
+      state.error = actions.payload;
     });
     builder.addCase(getPetSex.fulfilled, (state, actions) => {
       state.petSex = actions.payload;
@@ -43,10 +63,24 @@ const noticesSlice = createSlice({
     builder.addCase(getNotices.fulfilled, (state, actions) => {
       state.isLoading = false;
       state.error = null;
-        state.notices = actions.payload.results;
+      state.notices = actions.payload.results;
       state.lastPage = actions.payload.totalPages;
     });
     builder.addCase(getNotices.rejected, (state, actions) => {
+      state.isLoading = false;
+      state.error = actions.payload;
+    });
+    builder.addCase(getAllNotices.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(getAllNotices.fulfilled, (state, actions) => {
+      state.isLoading = false;
+      state.error = null;
+      state.notices = actions.payload.results.filter(item => item.sex === state.sexValue);
+      // state.lastPage = actions.payload.totalPages;
+    });
+    builder.addCase(getAllNotices.rejected, (state, actions) => {
       state.isLoading = false;
       state.error = actions.payload;
     });
@@ -82,4 +116,5 @@ const noticesSlice = createSlice({
   },
 });
 
+export const { changeSexValue } = noticesSlice.actions;
 export default noticesSlice.reducer;

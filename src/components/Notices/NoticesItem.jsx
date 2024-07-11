@@ -12,6 +12,10 @@ const NoticesItem = ({ data, isFavorite, setAddId, setDeleteId }) => {
   const { token } = useSelector(selectUser);
   const isLogin = Boolean(token);
 
+  const handleFavorites = (id) => {
+    if (!isLogin) return setOpen(true)
+    setAddId(id)
+  }
   return (
     <>
       <div className="relative h-[430px] md:h-[444px] bg-white rounded-[16px] p-6">
@@ -77,7 +81,7 @@ const NoticesItem = ({ data, isFavorite, setAddId, setDeleteId }) => {
             </Button>
             {!isFavorite ? (
               <Button
-                onClick={() => setAddId(data._id)}
+                onClick={() => {handleFavorites(data._id)}}
                 className="rounded-full bg-[#fff4df] min-w-[46px] h-[46px] md:min-w-[48px] md:h-[48px] flex justify-center items-center"
               >
                 <svg className="w-[18px] h-[18px] ">
