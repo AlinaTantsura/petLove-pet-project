@@ -55,12 +55,12 @@ export const getCities = createAsyncThunk(
 
 export const getNotices = createAsyncThunk(
   "notices/getNotices",
-  async ({ page, keyword, category, species }, thunkAPI) => {
+  async ({ page, keyword, category, species, locationId }, thunkAPI) => {
     try {
       const resp = await axios.get(
         `/notices?page=${page || 1}&keyword=${keyword || ""}&category=${
           category === "all" ? "" : category
-        }&species=${species === "all" ? "" : species}`
+        }&species=${species === "all" ? "" : species}&locationId=${locationId ? locationId : ""}`
       );
       return resp.data;
     } catch (error) {
@@ -72,12 +72,12 @@ export const getNotices = createAsyncThunk(
 
 export const getAllNotices = createAsyncThunk(
   "notices/getAllNotices",
-  async ({ page, keyword, category, species, limit }, thunkAPI) => {
+  async ({ page, keyword, category, species, limit, locationId }, thunkAPI) => {
     try {
       const resp = await axios.get(
         `/notices?page=${page || 1}&keyword=${keyword || ""}&category=${
           category === "all" ? "" : category
-        }&species=${species === "all" ? "" : species}&limit=${limit}`
+        }&species=${species === "all" ? "" : species}&limit=${limit}&locationId=${locationId ? locationId : ""}`
       );
       return resp.data;
     } catch (error) {

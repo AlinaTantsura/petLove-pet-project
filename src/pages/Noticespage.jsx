@@ -12,6 +12,7 @@ const Noticespage = () => {
   const [category, setCategory] = useState("all");
   const [gender, setGender] = useState("all");
   const [type, setType] = useState("all");
+  const [location, setLocation] = useState(null);
   const lastPage = useSelector(selectLastPage);
 
   return (
@@ -27,6 +28,8 @@ const Noticespage = () => {
         setGender={setGender}
         type={type}
         setType={setType}
+        location={location}
+        setLocation={setLocation}
       />
       <NoticesList
         page={page}
@@ -35,6 +38,7 @@ const Noticespage = () => {
         category={category}
         gender={gender}
         type={type}
+        location={location}
       />
       <Pagination setPage={setPage} page={page} lastPage={lastPage} />
     </div>

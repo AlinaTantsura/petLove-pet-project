@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCategories, getCities, getPetSex, getPetType } from "./notices/noticesOperations";
+import { getCities, getPetSex, getPetType } from "./notices/noticesOperations";
 import { loginUser, logoutUser, registerUser } from "./auth/authOperations";
 import { getOurFriends } from "./ourFriends/ourFriendsOpertions";
 

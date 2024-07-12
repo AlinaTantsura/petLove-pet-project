@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Select from "react-select";
 import {
   getCategories,
-  // getCities,
+  getCities,
   getPetSex,
   getPetType,
 } from "../../redux/notices/noticesOperations";
@@ -21,23 +21,34 @@ import {
 import clsx from "clsx";
 import { changeSexValue } from "../../redux/notices/noticesSlice";
 
-const NoticesFilters = ({ setSearchWord, setCategory, category, type, setType }) => {
+const NoticesFilters = ({
+  setSearchWord,
+  setCategory,
+  category,
+  type,
+  setType,
+  location,
+  setLocation,
+}) => {
   const dispatch = useDispatch();
   const categories = useSelector(selectCategories);
   const petSex = useSelector(selectPetSex);
   const petTypes = useSelector(selectPetTypes);
   const cities = useSelector(selectCities);
   const gender = useSelector(selectSexValue);
+  // const [currentCityId, setCurrentCityId] = useState(null)
+  const [currentCity, setCurrentCity] = useState("");
   const [sortWord, setSortWord] = useState("");
+  const [isOpenCategories, setIsOpenCategories] = useState(false);
+  const [isOpenGenders, setIsOpenGenders] = useState(false);
+  const [isOpenTypes, setIsOpenTypes] = useState(false);
+
   const radioButtons = [
     { value: "popular", label: "Popular" },
     { value: "unpopular", label: "Unpopular" },
     { value: "cheap", label: "Cheap" },
     { value: "expensive", label: "Expensive" },
   ];
-  const [isOpenCategories, setIsOpenCategories] = useState(false);
-  const [isOpenGenders, setIsOpenGenders] = useState(false);
-  const [isOpenTypes, setIsOpenTypes] = useState(false); 
 
   useEffect(() => {
     if (!categories) {
@@ -51,15 +62,23 @@ const NoticesFilters = ({ setSearchWord, setCategory, category, type, setType })
     }
   }, [dispatch, categories, petSex, petTypes]);
 
-  const options = cities?.map((city) => ({
-    label: `${city.stateEn}, ${city.cityEn}`,
-    value: city._id,
-  }));
+  useEffect(() => {
+    if (!cities) {
+      dispatch(getCities());
+    }
+  }, [dispatch, cities]);
+
+  const options = cities
+    ?.map((city) => ({
+      label: `${city.stateEn}, ${city.cityEn}`,
+      value: city._id,
+    }))
+    .filter((city) => city.label.includes(currentCity ? currentCity : "Krym"));
 
   const handleSelectCategory = (value) => {
     if (value !== category) {
       setIsOpenCategories(false);
-      setCategory(value)
+      setCategory(value);
     }
   };
   const handleSelectGender = (value) => {
@@ -74,9 +93,23 @@ const NoticesFilters = ({ setSearchWord, setCategory, category, type, setType })
       setType(value);
     }
   };
-  // console.log(sortWord)
+  const getValue = () => {
+    return location ? options.find((city) => city.value === location) : "";
+  };
+  const onChange = (e) => {
+    setLocation(e.value);
+  };
+
+  const handleInputChange = (inputValue, { action }) => {
+    if (action === "input-change") {
+      const inputValueToUpperCase =
+        inputValue[0]?.toUpperCase() + inputValue.slice(1);
+      setCurrentCity(inputValueToUpperCase);
+    }
+  };
+  // console.log(currentCity);
   return (
-    <div className="my-10 rounded-[30px] bg-[#fff4df] p-5 md:py-10 md:px-8">
+    <div className="my-10 rounded-[30px] bg-[#fff4df] p-5 md:py-10 md:px-8 xl:p-10">
       <ul className="flex flex-wrap gap-x-2 gap-y-3 md:gap-4 pb-5 border-b border-b-black-main border-opacity-10">
         <li className="w-full md:w-[265px]">
           <SearchField setSearchWord={setSearchWord} />
@@ -86,11 +119,9 @@ const NoticesFilters = ({ setSearchWord, setCategory, category, type, setType })
             onClick={() => setIsOpenCategories(!isOpenCategories)}
             className="p-3 md:p-[14px] flex-1 rounded-[30px] w-full bg-white outline-none placeholder:text-black-main text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] cursor-pointer text-start"
           >
-            {
-              category === "all"
-                ? "Category"
-                : category[0].toUpperCase() + category.slice(1)
-            }
+            {category === "all"
+              ? "Category"
+              : category[0].toUpperCase() + category.slice(1)}
           </button>
           {isOpenCategories && (
             <ul className="absolute z-10 top-[45px] md:top-[52px] w-full rounded-[15px] bg-white p-3 md:p-[14px] flex flex-col gap-2 text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]">
@@ -132,11 +163,9 @@ const NoticesFilters = ({ setSearchWord, setCategory, category, type, setType })
             onClick={() => setIsOpenGenders(!isOpenGenders)}
             className="p-3 md:p-[14px] flex-1 rounded-[30px] w-full bg-white outline-none placeholder:text-black-main text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] cursor-pointer text-start"
           >
-            {
-              gender === "all"
-                ? "By gender"
-                : gender[0].toUpperCase() + gender.slice(1)
-            }
+            {gender === "all"
+              ? "By gender"
+              : gender[0].toUpperCase() + gender.slice(1)}
           </button>
           {isOpenGenders && (
             <ul className="absolute z-10 top-[45px] md:top-[52px] w-full rounded-[15px] bg-white p-3 md:p-[14px] flex flex-col gap-2 text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]">
@@ -178,41 +207,40 @@ const NoticesFilters = ({ setSearchWord, setCategory, category, type, setType })
             onClick={() => setIsOpenTypes(!isOpenTypes)}
             className="p-3 md:p-[14px] flex-1 rounded-[30px] w-full bg-white outline-none placeholder:text-black-main text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] cursor-pointer text-start"
           >
-            {
-              type === "all"
-                ? "By type"
-                : type[0].toUpperCase() + type.slice(1)
-            }
+            {type === "all" ? "By type" : type[0].toUpperCase() + type.slice(1)}
           </button>
           {isOpenTypes && (
             <div className="absolute z-10 top-[45px] md:top-[52px] w-full h-[216px] rounded-[15px] bg-white p-3 md:p-[14px] ">
-            <ul className={clsx("h-full overflow-scroll flex flex-col gap-2 text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]",
-              "types-menu"
-            )}>
-              <li
-                onClick={() => handleSelectType("all")}
+              <ul
                 className={clsx(
-                  "text-black-main text-opacity-60 cursor-pointer hover:font-bold",
-                  type === "all" && "text-orange-main"
+                  "h-full overflow-scroll flex flex-col gap-2 text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]",
+                  "types-menu"
                 )}
               >
-                Show all
-              </li>
-              {petTypes &&
-                petTypes.map((typeItem) => (
-                  <li
-                    onClick={() => handleSelectType(typeItem)}
-                    className={clsx(
-                      "text-black-main text-opacity-60 cursor-pointer hover:font-bold",
-                      type === typeItem && "text-orange-main",
-                    )}
-                    key={typeItem}
-                  >
-                    {typeItem[0].toUpperCase() + typeItem.slice(1)}
-                  </li>
-                ))}
-            </ul>
-             </div>   
+                <li
+                  onClick={() => handleSelectType("all")}
+                  className={clsx(
+                    "text-black-main text-opacity-60 cursor-pointer hover:font-bold",
+                    type === "all" && "text-orange-main"
+                  )}
+                >
+                  Show all
+                </li>
+                {petTypes &&
+                  petTypes.map((typeItem) => (
+                    <li
+                      onClick={() => handleSelectType(typeItem)}
+                      className={clsx(
+                        "text-black-main text-opacity-60 cursor-pointer hover:font-bold",
+                        type === typeItem && "text-orange-main"
+                      )}
+                      key={typeItem}
+                    >
+                      {typeItem[0].toUpperCase() + typeItem.slice(1)}
+                    </li>
+                  ))}
+              </ul>
+            </div>
           )}
           <svg
             className={clsx(
@@ -223,11 +251,23 @@ const NoticesFilters = ({ setSearchWord, setCategory, category, type, setType })
             <use href={sprite + "#icon-chevron-down"} />
           </svg>
         </li>
-        <li>
-          <Select options={options} placeholder="Location" />
+        <li className="relative w-full md:w-[227px]">
+          <Select
+            onChange={onChange}
+            onInputChange={handleInputChange}
+            value={getValue()}
+            classNamePrefix="custom-select"
+            options={options}
+            placeholder="Location"
+          />
+          <button className="w-[18px] h-[18px] absolute top-[12px] md:top-[14px] right-3 md:right-[14px]">
+            <svg className="w-full h-full">
+              <use href={sprite + "#icon-search"} />
+            </svg>
+          </button>
         </li>
       </ul>
-      
+
       <ul className="mt-5 flex flex-wrap gap-[10px]">
         {radioButtons.map((btn) => (
           <li key={btn.value}>
@@ -260,110 +300,6 @@ const NoticesFilters = ({ setSearchWord, setCategory, category, type, setType })
             </label>
           </li>
         ))}
-        {/* <li>
-          <input
-            onChange={(e) => { console.log(e)}}
-            className="hidden peer"
-            type="radio"
-            id="popular"
-            name="sort"
-            value="popular"
-          />
-          <label
-            className="p-3 rounded-[30px] bg-white text-[14px] leading-[129%] inline-flex items-center justify-center cursor-pointer peer-checked:bg-orange-main peer-checked:text-white hover:bg-slate-100"
-            htmlFor="popular"
-          >
-            Popular
-            {sortWord === "popular" && (
-              <button
-                onClick={() => {document.getElementById(`${sortWord}`).removeAttribute("checked"); setSortWord("")}}
-                className="w-[18px] h-[18px]"
-              >
-                <svg className="w-[18px] h-[18px] stroke-white">
-                  <use href={sprite + "#icon-x"} />
-                </svg>
-              </button>
-            )}
-          </label>
-        </li>
-        <li>
-          <input
-            onChange={(e) => setSortWord(e.target.value)}
-            className="hidden peer"
-            type="radio"
-            id="unpopular"
-            name="sort"
-            value="unpopular"
-          />
-          <label
-            className="p-3 rounded-[30px] bg-white text-[14px] leading-[129%] inline-flex items-center justify-center gap-[6px] cursor-pointer peer-checked:bg-orange-main peer-checked:text-white hover:bg-slate-100"
-            htmlFor="unpopular"
-          >
-            Unpopular
-            {sortWord === "unpopular" && (
-              <button
-                onClick={() => setSortWord("")}
-                className="w-[18px] h-[18px]"
-              >
-                <svg className="w-[18px] h-[18px] stroke-white">
-                  <use href={sprite + "#icon-x"} />
-                </svg>
-              </button>
-            )}
-          </label>
-        </li>
-        <li>
-          <input
-            onChange={(e) => setSortWord(e.target.value)}
-            className="hidden peer"
-            type="radio"
-            id="cheap"
-            name="sort"
-            value="cheap"
-          />
-          <label
-            className="p-3 rounded-[30px] bg-white text-[14px] leading-[129%] inline-flex items-center justify-center cursor-pointer peer-checked:bg-orange-main peer-checked:text-white hover:bg-slate-100"
-            htmlFor="cheap"
-          >
-            Cheap
-            {sortWord === "cheap" && (
-              <button
-                onClick={() => setSortWord("")}
-                className="w-[18px] h-[18px]"
-              >
-                <svg className="w-[18px] h-[18px] stroke-white">
-                  <use href={sprite + "#icon-x"} />
-                </svg>
-              </button>
-            )}
-          </label>
-        </li>
-        <li>
-          <input
-            onChange={(e) => setSortWord(e.target.value)}
-            className="hidden peer"
-            type="radio"
-            id="expensive"
-            name="sort"
-            value="expensive"
-          />
-          <label
-            className="p-3 rounded-[30px] bg-white text-[14px] leading-[129%] inline-flex items-center justify-center cursor-pointer peer-checked:bg-orange-main peer-checked:text-white hover:bg-slate-100"
-            htmlFor="expensive"
-          >
-            Expensive
-            {sortWord === "expensive" && (
-              <button
-                onClick={() => setSortWord("")}
-                className="w-[18px] h-[18px]"
-              >
-                <svg className="w-[18px] h-[18px] stroke-white">
-                  <use href={sprite + "#icon-x"} />
-                </svg>
-              </button>
-            )}
-          </label>
-        </li> */}
       </ul>
     </div>
   );

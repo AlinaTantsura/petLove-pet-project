@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root{
+:root {
   --font-family: "Manrope", sans-serif;
 }
-*{
+* {
   margin: 0;
   padding: 0;
   font-family: var(--font-family);
@@ -15,32 +15,39 @@
   letter-spacing: -0.03em;
 }
 
-body{
+body {
   background-color: #f4f4f4;
 }
 
-ul, li{
+ul,
+li {
   margin: 0;
   padding: 0;
   list-style: none;
   color: #262626;
 }
 
-h1, h2, h3, h4, h5, h6, p, span, a{
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+a {
   color: #262626;
 }
 
-.types-menu::-webkit-scrollbar{
+.types-menu::-webkit-scrollbar {
   background-color: white;
   width: 8px;
   /* height: 100px; */
-
 }
-.types-menu::-webkit-scrollbar-track{
+.types-menu::-webkit-scrollbar-track {
   background-color: white;
-
 }
-.types-menu::-webkit-scrollbar-thumb{
+.types-menu::-webkit-scrollbar-thumb {
   background-color: rgba(38, 38, 38, 0.08);
   border-radius: 13px;
   height: 100px;
@@ -48,4 +55,91 @@ h1, h2, h3, h4, h5, h6, p, span, a{
 
 .types-menu::-webkit-scrollbar:horizontal {
   display: none;
+}
+
+.custom-select__control {
+  background-color: white !important;
+  border: none !important;
+  border-radius: 30px !important;
+  box-shadow: none !important;
+}
+.custom-select__control--menu-is-open {
+  border: 1px solid #f6b83d !important;
+}
+.custom-select__value-container {
+  border: none !important;
+  padding: 12px !important;
+  font-size: 14px !important;
+  line-height: 129% !important;
+  color: #262626 !important;
+  margin: 0 !important;
+  cursor: text !important;
+}
+.custom-select__input-container {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.custom-select__placeholder {
+  font-size: 14px !important;
+  line-height: 129% !important;
+  color: #262626 !important;
+  margin: 0 !important;
+}
+.custom-select__indicators {
+  display: none !important;
+}
+.custom-select__indicator {
+  display: none !important;
+}
+.custom-select__menu {
+  height: 94px;
+  background-color: white !important;
+  border-radius: 15px !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-align: start !important;
+  margin: 0 !important;
+  margin-top: 4px !important;
+  padding: 12px !important;
+  overflow-y: scroll !important;
+}
+.custom-select__menu::-webkit-scrollbar {
+  display: none;
+}
+.custom-select__menu-list {
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+}
+
+.custom-select__option {
+  font-size: 14px !important;
+  line-height: 129% !important;
+  color: #262626 !important;
+  margin: 0 !important;
+  margin-bottom: 8px !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+}
+
+.custom-select__option--is-focused {
+  font-weight: 700;
+  background: none !important;
+}
+
+@media (min-width: 768px) {
+  .custom-select__value-container {
+    padding: 14px !important;
+    font-size: 16px !important;
+    line-height: 125% !important;
+  }
+  .custom-select__placeholder {
+    font-size: 16px !important;
+    line-height: 125% !important;
+  }
+    .custom-select__menu {
+      height: 104px;}
+  .custom-select__option {
+    font-size: 16px !important;
+    line-height: 125% !important;
+  }
 }

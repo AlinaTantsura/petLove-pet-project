@@ -57,7 +57,7 @@ const Pagination = ({ setPage, page, lastPage }) => {
         <div
           className={clsx(
             "flex justify-center items-center w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 text-[16px] md:text-[20px] md:leading-[110%]",
-            (lastPage < 3 || page < lastPage - 2) && "hidden",
+            (lastPage < 4 || page < lastPage - 2) && "hidden",
             (lastPage < 4 || page < lastPage - 3) && "md:hidden"
           )}
         >
@@ -97,7 +97,7 @@ const Pagination = ({ setPage, page, lastPage }) => {
             {page + 1}
           </button>
         )}
-        {page !== lastPage && page !== lastPage - 1 && (
+        {(page !== lastPage && page !== lastPage - 1) && (
           <>
             <button
               onClick={handleChangePage}
@@ -122,25 +122,6 @@ const Pagination = ({ setPage, page, lastPage }) => {
           ...
         </div>
       </div>
-
-      {/* {page === 1 ? (
-        
-      ) : (
-        <div className="flex gap-[10px]">
-          <div className="w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 flex justify-center items-center text-[16px] md:text-[20px] md:leading-[110%]">
-            ...
-          </div>
-          <div className="w-10 md:w-[44px] h-10 md:h-[44px] rounded-full bg-orange-main text-white flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]">
-            {page}
-          </div>
-          <div className="hidden w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 md:flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]">
-            {page + 1}
-            </div>
-            <div className="w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 flex justify-center items-center text-[16px] md:text-[20px] md:leading-[110%]">
-            ...
-          </div>
-        </div>
-      )} */}
 
       <div className="flex gap-[6px]">
         <button

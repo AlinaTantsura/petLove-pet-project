@@ -26,12 +26,9 @@ const noticesSlice = createSlice({
     sexValue: "all",
   },
   reducers: {
-    changeLastPage(state, actions){
-      state.lastPage = actions.payload
-    },
     changeSexValue(state, actions) {
       state.sexValue = actions.payload
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getCategories.pending, (state) => {
@@ -116,5 +113,5 @@ const noticesSlice = createSlice({
   },
 });
 
-export const { changeSexValue } = noticesSlice.actions;
+export const { changeSexValue} = noticesSlice.actions;
 export default noticesSlice.reducer;

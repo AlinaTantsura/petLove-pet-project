@@ -16,7 +16,11 @@ const store = configureStore({
         auth: authReducer,
         news: newsReducer,
         notices: noticesReducer
-    }
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    immutableCheck: false,
+    serializableCheck: false,
+  })
 });
 
 export default store
