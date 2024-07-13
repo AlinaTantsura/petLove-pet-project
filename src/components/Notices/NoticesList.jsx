@@ -6,6 +6,7 @@ import {
   selectLastPage,
   selectNotices,
   selectSexValue,
+  selectSortWord,
 } from "../../redux/notices/noticesSelectors";
 import { useEffect, useState } from "react";
 import {
@@ -35,6 +36,8 @@ const NoticesList = ({
   const isLogin = Boolean(token);
   const lastPage = useSelector(selectLastPage);
   const gender = useSelector(selectSexValue);
+  const sortWord = useSelector(selectSortWord);
+  const firstNotPopular = Boolean(sortWord === "unpopular")
 
   useEffect(() => {
     setPage(1);
@@ -42,9 +45,23 @@ const NoticesList = ({
 
   useEffect(() => {
     dispatch(
-      getNotices({ page, keyword: searchWord, category, species: type, locationId: location })
+      getNotices({ page, keyword: searchWord, category, species: type, locationId: location, firstNotPopular })
     );
-    if (gender !== "all") {
+    
+  //   if () {
+  //     dispatch(
+  //       getAllNotices({
+  //         page,
+  //         keyword: searchWord,
+  //         category,
+  //         species: type,
+  //         limit: lastPage * 6,
+  //         locationId: location,
+  //         firstNotPopular
+  //       })
+  //     );
+  // }
+    if (gender !== "all" || sortWord === "cheap" || sortWord === "expensive") {
       dispatch(
         getAllNotices({
           page,
@@ -52,11 +69,13 @@ const NoticesList = ({
           category,
           species: type,
           limit: lastPage * 6,
-          locationId: location
+          locationId: location,
+          firstNotPopular
         })
       );
     }
-  }, [dispatch, page, searchWord, category, type, gender, lastPage, location]);
+    
+  }, [dispatch, page, searchWord, category, type, gender, lastPage, location, firstNotPopular, sortWord]);
 
   useEffect(() => {
     if (isLogin) dispatch(getCurrentUser());
@@ -76,13 +95,8 @@ const NoticesList = ({
   const isFavorite = (id) => {
     return favorites.includes(id) ? true : false;
   };
-  console.log(location);
+  // console.log(notices);
 
-  // const filteredNotices = notices.filter(notice => notice.sex === gender)
-  // if (filteredNotices.length > 0 && gender !== "all") {
-  //   dispatch(changeLastPage(Math.ceil(filteredNotices.length / 6)))
-  // }
-  // console.log(notices)
 
   return (gender === "all" && notices.length > 0) ||
     (gender !== "all" && notices.length > 0) ? (

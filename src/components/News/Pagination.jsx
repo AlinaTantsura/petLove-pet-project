@@ -1,12 +1,16 @@
 /* eslint-disable react/prop-types */
 import sprite from "../../assets/images/sprite.svg";
 import clsx from "clsx";
+import { selectSexValue, selectSortWord } from "../../redux/notices/noticesSelectors";
+import { useSelector } from "react-redux";
 
 const Pagination = ({ setPage, page, lastPage }) => {
+  const sexValue = useSelector(selectSexValue);
+  const sortWord = useSelector(selectSortWord);
   const handleChangePage = (e) => {
     setPage(Number(e.target.innerText));
   };
-  if (lastPage < 2) return null;
+  if (lastPage < 2 || sexValue !== "all" || sortWord === "cheap" || sortWord === "expensive") return null;
   return (
     <div className="mt-[44px] md:mt-[88px] mb-[60px] md:mb-[48px] flex justify-center gap-[11px] md:gap-[24px]">
       <div className="flex gap-[6px] md:gap-2">

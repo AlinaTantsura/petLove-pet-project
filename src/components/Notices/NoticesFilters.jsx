@@ -17,9 +17,10 @@ import {
   selectPetSex,
   selectPetTypes,
   selectSexValue,
+  selectSortWord,
 } from "../../redux/notices/noticesSelectors";
 import clsx from "clsx";
-import { changeSexValue } from "../../redux/notices/noticesSlice";
+import { changeSexValue, changeSortWord } from "../../redux/notices/noticesSlice";
 
 const NoticesFilters = ({
   setSearchWord,
@@ -27,7 +28,6 @@ const NoticesFilters = ({
   category,
   type,
   setType,
-  location,
   setLocation,
 }) => {
   const dispatch = useDispatch();
@@ -36,9 +36,9 @@ const NoticesFilters = ({
   const petTypes = useSelector(selectPetTypes);
   const cities = useSelector(selectCities);
   const gender = useSelector(selectSexValue);
+  const sortWord = useSelector(selectSortWord)
   // const [currentCityId, setCurrentCityId] = useState(null)
   const [currentCity, setCurrentCity] = useState("");
-  const [sortWord, setSortWord] = useState("");
   const [isOpenCategories, setIsOpenCategories] = useState(false);
   const [isOpenGenders, setIsOpenGenders] = useState(false);
   const [isOpenTypes, setIsOpenTypes] = useState(false);
@@ -94,10 +94,10 @@ const NoticesFilters = ({
     }
   };
   const getValue = () => {
-    return location ? options.find((city) => city.value === location) : "";
+    return currentCity ? options.find((city) => city.value === currentCity) : "";
   };
   const onChange = (e) => {
-    setLocation(e.value);
+    setCurrentCity(e.value)
   };
 
   const handleInputChange = (inputValue, { action }) => {
@@ -107,7 +107,8 @@ const NoticesFilters = ({
       setCurrentCity(inputValueToUpperCase);
     }
   };
-  // console.log(currentCity);
+  
+  // console.log(sortWord);
   return (
     <div className="my-10 rounded-[30px] bg-[#fff4df] p-5 md:py-10 md:px-8 xl:p-10">
       <ul className="flex flex-wrap gap-x-2 gap-y-3 md:gap-4 pb-5 border-b border-b-black-main border-opacity-10">
@@ -260,7 +261,22 @@ const NoticesFilters = ({
             options={options}
             placeholder="Location"
           />
-          <button className="w-[18px] h-[18px] absolute top-[12px] md:top-[14px] right-3 md:right-[14px]">
+          {currentCity && (
+        <button
+          onClick={() => {
+                setCurrentCity("");
+                setLocation("");
+          }}
+          className="w-[20px] h-[18px] absolute top-[12px] px-[1px] md:top-[16px] right-[34px] md:right-[36px] bg-white"
+        >
+          <svg className="w-full h-full stroke-black-main">
+            <use href={sprite + "#icon-x"} />
+          </svg>
+        </button>
+      )}
+          <button
+            onClick={()=>setLocation(currentCity)}
+            className="w-[22px] h-[18px] px-[2px] absolute top-[12px] md:top-[16px] right-3 md:right-[14px] bg-white">
             <svg className="w-full h-full">
               <use href={sprite + "#icon-search"} />
             </svg>
@@ -278,7 +294,8 @@ const NoticesFilters = ({
               value={btn.value}
               id={btn.value}
               checked={sortWord === btn.value}
-              onChange={(e) => setSortWord(e.target.value)}
+              // onChange={(e) => setSortWord(e.target.value)}
+              onChange={(e) => {dispatch(changeSortWord(e.target.value))}}
             />
             <label
               className="p-3 rounded-[30px] bg-white text-[14px] leading-[129%] inline-flex items-center justify-center cursor-pointer peer-checked:bg-orange-main peer-checked:text-white hover:bg-slate-100"
@@ -288,7 +305,7 @@ const NoticesFilters = ({
               {sortWord === btn.value && (
                 <button
                   onClick={() => {
-                    setSortWord("");
+                    dispatch(changeSortWord(""))
                   }}
                   className="w-[18px] h-[18px]"
                 >

@@ -30,6 +30,8 @@ const Noticespage = () => {
         setType={setType}
         location={location}
         setLocation={setLocation}
+        // sortWord={sortWord}
+        // setSortWord={setSortWord}
       />
       <NoticesList
         page={page}
@@ -39,6 +41,7 @@ const Noticespage = () => {
         gender={gender}
         type={type}
         location={location}
+        // sortWord={sortWord}
       />
       <Pagination setPage={setPage} page={page} lastPage={lastPage} />
     </div>

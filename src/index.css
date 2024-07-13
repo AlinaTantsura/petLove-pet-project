@@ -76,8 +76,10 @@ a {
   cursor: text !important;
 }
 .custom-select__input-container {
+  width: 150px !important;
   padding: 0 !important;
   margin: 0 !important;
+    overflow: hidden !important;
 }
 .custom-select__placeholder {
   font-size: 14px !important;
@@ -115,6 +117,7 @@ a {
   font-size: 14px !important;
   line-height: 129% !important;
   color: #262626 !important;
+  color: rgba(38, 38, 38, 0.4) !important;
   margin: 0 !important;
   margin-bottom: 8px !important;
   padding: 0 !important;

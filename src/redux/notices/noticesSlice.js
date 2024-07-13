@@ -24,10 +24,14 @@ const noticesSlice = createSlice({
     isLoading: false,
     error: null,
     sexValue: "all",
+    sortWord: null,
   },
   reducers: {
     changeSexValue(state, actions) {
       state.sexValue = actions.payload
+    },
+    changeSortWord(state, actions) {
+      state.sortWord = actions.payload
     },
   },
   extraReducers: (builder) => {
@@ -74,8 +78,21 @@ const noticesSlice = createSlice({
     builder.addCase(getAllNotices.fulfilled, (state, actions) => {
       state.isLoading = false;
       state.error = null;
-      state.notices = actions.payload.results.filter(item => item.sex === state.sexValue);
-      // state.lastPage = actions.payload.totalPages;
+      state.notices = actions.payload.results
+      
+      if (state.sexValue !== "all") {
+        state.notices = state.notices.filter(item => item.sex === state.sexValue);
+      }
+      if (state.sortWord === "cheap") {
+        const noPrice = state.notices.filter(item => item.price === undefined);
+        const sortPrices = state.notices.filter(item => item.price).sort((itemPrev, itemNext) => itemPrev.price - itemNext.price);
+        state.notices = [...noPrice, ...sortPrices]
+      }
+      if (state.sortWord === "expensive") {
+        const noPrice = state.notices.filter(item => item.price === undefined);
+        const sortPrices = state.notices.filter(item => item.price).sort((itemPrev, itemNext) => itemNext.price - itemPrev.price);
+        state.notices = [...sortPrices, ...noPrice]
+      }
     });
     builder.addCase(getAllNotices.rejected, (state, actions) => {
       state.isLoading = false;
@@ -113,5 +130,5 @@ const noticesSlice = createSlice({
   },
 });
 
-export const { changeSexValue} = noticesSlice.actions;
+export const { changeSexValue, changeSortWord} = noticesSlice.actions;
 export default noticesSlice.reducer;
