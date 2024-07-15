@@ -30,7 +30,7 @@ const NoticesItem = ({ data, isFavorite, setAddId, setDeleteId }) => {
           <h3 className="mb-2 font-bold text-[16px] md:text-[18px] md:leading-[133%] text-[#2b2b2a] flex justify-between items-center">
             {data.title}
             <span className="font-normal text-[14px] leading-[129%] md:leading-[143%] flex gap-1 items-center">
-              <svg className="w-4 h-4">
+              <svg className="w-4 h-4 fill-[#ffc531] stroke-[#ffc531]">
                 <use href={sprite + "#icon-star"} />
               </svg>
               {data.popularity}

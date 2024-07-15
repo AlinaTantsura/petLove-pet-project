@@ -1,4 +1,4 @@
-import NoticesItem from "./Profile/NoticesItem";
+import NoticesItem from "./NoticesItem";
 
 /* eslint-disable react/no-unescaped-entities */
 const MyNotices = () => {

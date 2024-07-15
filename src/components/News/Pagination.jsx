@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types */
 import sprite from "../../assets/images/sprite.svg";
 import clsx from "clsx";
-import { selectSexValue, selectSortWord } from "../../redux/notices/noticesSelectors";
+import {
+  selectSexValue,
+  selectSortWord,
+} from "../../redux/notices/noticesSelectors";
 import { useSelector } from "react-redux";
 
 const Pagination = ({ setPage, page, lastPage }) => {
@@ -10,7 +13,13 @@ const Pagination = ({ setPage, page, lastPage }) => {
   const handleChangePage = (e) => {
     setPage(Number(e.target.innerText));
   };
-  if (lastPage < 2 || sexValue !== "all" || sortWord === "cheap" || sortWord === "expensive") return null;
+  if (
+    lastPage < 2 ||
+    sexValue !== "all" ||
+    sortWord === "cheap" ||
+    sortWord === "expensive"
+  )
+    return null;
   return (
     <div className="mt-[44px] md:mt-[88px] mb-[60px] md:mb-[48px] flex justify-center gap-[11px] md:gap-[24px]">
       <div className="flex gap-[6px] md:gap-2">
@@ -70,9 +79,10 @@ const Pagination = ({ setPage, page, lastPage }) => {
         {page === lastPage && (
           <button
             onClick={handleChangePage}
-            className={clsx("w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 hidden md:flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]",
-              (lastPage < 3) && "hidden",
-              (lastPage < 4) && "md:hidden"
+            className={clsx(
+              "w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 hidden md:flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]",
+              lastPage < 3 && "hidden",
+              lastPage < 4 && "md:hidden"
             )}
           >
             {page - 2}
@@ -83,8 +93,8 @@ const Pagination = ({ setPage, page, lastPage }) => {
             onClick={handleChangePage}
             className={clsx(
               "w-10 md:w-[44px] h-10 md:h-[44px] rounded-full border border-black-main border-opacity-5 flex justify-center items-center font-bold text-[14px] md:text-[18px] leading-[129%] md:leading-[122%]",
-              (lastPage < 3 && page === 1) && "hidden",
-              (lastPage < 4 && page === 1) && "md:hidden"
+              lastPage < 3 && page === 1 && "hidden",
+              lastPage < 4 && page === 1 && "md:hidden"
             )}
           >
             {page - 1}
@@ -101,7 +111,7 @@ const Pagination = ({ setPage, page, lastPage }) => {
             {page + 1}
           </button>
         )}
-        {(page !== lastPage && page !== lastPage - 1) && (
+        {page !== lastPage && page !== lastPage - 1 && (
           <>
             <button
               onClick={handleChangePage}

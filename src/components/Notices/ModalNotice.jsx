@@ -8,6 +8,8 @@ const ModalNotice = ({ onClose, open, data, isFavorite, setAddId, setDeleteId })
         if (isFavorite) setDeleteId(data._id)
         else setAddId(data._id)
     }
+    const arrayStars = [1, 2, 3, 4, 5].slice(0, data.popularity)
+    const arrayGreyStars = [1, 2, 3, 4, 5].slice(data.popularity)
   return (
       <ModalWindow onClose={onClose} open={open}>
           <div className="w-[335px] md:w-[473px] px-5 py-10 flex flex-col items-center ">
@@ -16,24 +18,25 @@ const ModalNotice = ({ onClose, open, data, isFavorite, setAddId, setDeleteId })
                   <span className="absolute top-0 left-1 z-10000 bg-[#fff4df] rounded-[30px] py-2 px-[14px] text-[14px] leading-[129%] tracking-[-0.02em] text-orange-main">{data.category[0].toUpperCase() + data.category.slice(1)}</span>
               </div>
               <h2 className="mb-[10px] font-bold text-[16px] md:text-[18px] md:leading-[133%] text-[#2b2b2a]">{data.title}</h2>
-              <div className="mb-6 md:mb-5 flex gap-1 items-center justify-center">
-                  <svg className="w-4 h-4">
-                      <use href={sprite + "#icon-star"} />
-                  </svg>
-                  <svg className="w-4 h-4 ">
-                      <use href={sprite + "#icon-star"} />
-                  </svg>
-                  <svg className="w-4 h-4 ">
-                      <use href={sprite + "#icon-star"} />
-                  </svg>
-                  <svg className="w-4 h-4 ">
-                      <use href={sprite + "#icon-star"} />
-                  </svg>
-                  <svg className="w-4 h-4">
-                      <use href={sprite + "#icon-star"} />
-                  </svg>
+              <ul className="mb-6 md:mb-5 flex gap-1 items-center justify-center">
+                  {arrayStars.map(() => {
+                    return (<li className="w-4 h-4" key={crypto.randomUUID()}>
+                          <svg className="w-4 h-4 fill-[#ffc531] stroke-[#ffc531]" >
+                              <use href={sprite + "#icon-star"} />
+                          </svg>
+                      </li>)
+                  })}
+                  {arrayGreyStars.length > 0 && arrayGreyStars.map(() => {
+                      return (<li className="w-4 h-4" key={crypto.randomUUID()}>
+                          <svg className="w-4 h-4 fill-black-main opacity-5 stroke-black-main" >
+                              <use href={sprite + "#icon-star"} />
+                          </svg>
+                      </li>)
+                  })
+                      
+                  }
                   <span className="text-[14px] leading-[143%] text-[#2b2b2a]">{data.popularity}</span>
-              </div>
+              </ul>
               <ul className="mb-[18px] flex gap-[27px]">
                   <li className="text-[12px] leading-[117%] tracking-[-0.02em] flex flex-col justify-center items-center gap-1">
                       <span className="text-[10px] leading-[140%] opacity-50">

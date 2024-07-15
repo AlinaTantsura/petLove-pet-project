@@ -17,10 +17,10 @@ import {
   selectPetSex,
   selectPetTypes,
   selectSexValue,
-  selectSortWord,
 } from "../../redux/notices/noticesSelectors";
 import clsx from "clsx";
-import { changeSexValue, changeSortWord } from "../../redux/notices/noticesSlice";
+import { changeSexValue } from "../../redux/notices/noticesSlice";
+import SortBox from "./SortBox";
 
 const NoticesFilters = ({
   setSearchWord,
@@ -36,19 +36,18 @@ const NoticesFilters = ({
   const petTypes = useSelector(selectPetTypes);
   const cities = useSelector(selectCities);
   const gender = useSelector(selectSexValue);
-  const sortWord = useSelector(selectSortWord)
   // const [currentCityId, setCurrentCityId] = useState(null)
   const [currentCity, setCurrentCity] = useState("");
   const [isOpenCategories, setIsOpenCategories] = useState(false);
   const [isOpenGenders, setIsOpenGenders] = useState(false);
   const [isOpenTypes, setIsOpenTypes] = useState(false);
 
-  const radioButtons = [
-    { value: "popular", label: "Popular" },
-    { value: "unpopular", label: "Unpopular" },
-    { value: "cheap", label: "Cheap" },
-    { value: "expensive", label: "Expensive" },
-  ];
+  // const radioButtons = [
+  //   { value: "popular", label: "Popular" },
+  //   { value: "unpopular", label: "Unpopular" },
+  //   { value: "cheap", label: "Cheap" },
+  //   { value: "expensive", label: "Expensive" },
+  // ];
 
   useEffect(() => {
     if (!categories) {
@@ -283,12 +282,12 @@ const NoticesFilters = ({
           </button>
         </li>
       </ul>
-
-      <ul className="mt-5 flex flex-wrap gap-[10px]">
+      <SortBox setCategory={setCategory} setType={setType} setLocation={setLocation} />
+      {/* <ul className="mt-5 flex flex-wrap gap-[10px]">
         {radioButtons.map((btn) => (
           <li key={btn.value}>
             <input
-              className="hidden peer"
+              className="hidden"
               name="sort"
               type="radio"
               value={btn.value}
@@ -298,14 +297,20 @@ const NoticesFilters = ({
               onChange={(e) => {dispatch(changeSortWord(e.target.value))}}
             />
             <label
-              className="p-3 rounded-[30px] bg-white text-[14px] leading-[129%] inline-flex items-center justify-center cursor-pointer peer-checked:bg-orange-main peer-checked:text-white hover:bg-slate-100"
+              className={clsx("p-3 rounded-[30px] text-[14px] leading-[129%] inline-flex items-center justify-center cursor-pointer",
+                sortWord === btn.value ? "bg-orange-main text-white" : "bg-white hover:bg-slate-100" 
+              )}
               htmlFor={btn.value}
             >
               {btn.label}
               {sortWord === btn.value && (
                 <button
                   onClick={() => {
-                    dispatch(changeSortWord(""))
+                    dispatch(changeSortWord(null))
+                    dispatch(changeSexValue("all"));
+                    setCategory("all");
+                    setType("all");
+                    setLocation("");
                   }}
                   className="w-[18px] h-[18px]"
                 >
@@ -317,7 +322,7 @@ const NoticesFilters = ({
             </label>
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 };
