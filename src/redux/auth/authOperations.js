@@ -70,3 +70,27 @@ export const getCurrentUser = createAsyncThunk(
         }
     }
 );
+
+export const getAllUserInfo = createAsyncThunk(
+    "user/getAllUserInfo",
+    async (_, thunkAPI) => {
+        try {
+            const resp = await axios.get('/users/current/full')
+            return resp.data
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data.message)
+        }
+    }
+);
+
+export const editUserInfo = createAsyncThunk(
+    "user/editUserInfo",
+    async (editData, thunkAPI) => {
+        try {
+            const resp = await axios.patch('/users/current/edit', editData)
+            return resp.data
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data.message)
+        }
+    }
+);

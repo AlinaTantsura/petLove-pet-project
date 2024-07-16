@@ -1,9 +1,10 @@
+/* eslint-disable react/prop-types */
 import Button from "../Button";
 import sprite from "../../assets/images/sprite.svg";
 import ModalEditUser from "./ModalEditUser";
 import { useState } from "react";
 
-const EditUserBtn = () => {
+const EditUserBtn = ({data}) => {
   const [openModal, setOpenModal] = useState(false);
   return (
     <>
@@ -14,7 +15,7 @@ const EditUserBtn = () => {
           <use href={sprite + "#icon-edit-2"} />
         </svg>
       </Button>
-      <ModalEditUser open={openModal} onClose={() => setOpenModal(false)} />
+      <ModalEditUser open={openModal} onClose={() => setOpenModal(false)} userData={data} />
     </>
   );
 };
