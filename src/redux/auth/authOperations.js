@@ -94,3 +94,27 @@ export const editUserInfo = createAsyncThunk(
         }
     }
 );
+
+export const addPet = createAsyncThunk(
+    "user/addPet",
+    async (editData, thunkAPI) => {
+        try {
+            const resp = await axios.patch('/users/current/edit', editData)
+            return resp.data
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data.message)
+        }
+    }
+);
+
+export const removePet = createAsyncThunk(
+    "user/removePet",
+    async (id, thunkAPI) => {
+        try {
+            const resp = await axios.delete(`/users/current/pets/remove/${id}`)
+            return resp.data
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data.message)
+        }
+    }
+);

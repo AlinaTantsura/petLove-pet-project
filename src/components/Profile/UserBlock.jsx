@@ -1,8 +1,11 @@
 /* eslint-disable react/prop-types */
 import clsx from "clsx";
 import sprite from "../../assets/images/sprite.svg";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/auth/authSelectors";
 
-const UserBlock = ({data}) => {
+const UserBlock = () => {
+    const data = useSelector(selectUser);
   return (
     <div className="">
       <div className="w-[80px] rounded-[30px] bg-orange-main px-[14px] py-[10px] flex gap-1 items-center text-[14px] leading-[129%] tracking-[-0.02em] text-white">

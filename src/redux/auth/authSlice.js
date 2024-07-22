@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { editUserInfo, getAllUserInfo, getCurrentUser, loginUser, logoutUser, registerUser } from "./authOperations";
+import { editUserInfo, getAllUserInfo, getCurrentUser, loginUser, logoutUser, registerUser, removePet } from "./authOperations";
 import { getOurFriends } from "../ourFriends/ourFriendsOpertions";
 
 const authSlice = createSlice({
@@ -14,6 +14,7 @@ const authSlice = createSlice({
         },
         friends: [],
         favoritesList: [],
+        petsList: [],
         isLoading: false,
         error: null
     },
@@ -53,11 +54,12 @@ const authSlice = createSlice({
         builder.addCase(getAllUserInfo.fulfilled, (state, actions) => {
             state.isLoading = false;
             state.error = null;
-            // console.log(actions.payload)
+            console.log(actions.payload)
             state.user.avatar = actions.payload.avatar;
             state.user.name = actions.payload.name;
             state.user.email = actions.payload.email;
             state.user.phone = actions.payload.phone;
+            state.petsList = actions.payload.pets;
         });
         builder.addCase(getAllUserInfo.rejected, (state, actions) => {
             state.isLoading = false;
@@ -70,13 +72,27 @@ const authSlice = createSlice({
         builder.addCase(editUserInfo.fulfilled, (state, actions) => {
             state.isLoading = false;
             state.error = null;
-            console.log(actions.payload)
-            // state.user.avatar = actions.payload.avatar;
-            // state.user.name = actions.payload.name;
-            // state.user.email = actions.payload.email;
-            // state.user.phone = actions.payload.phone;
+            state.user.avatar = actions.payload.avatar;
+            state.user.name = actions.payload.name;
+            state.user.email = actions.payload.email;
+            state.user.phone = actions.payload.phone;
+            state.petsList = actions.payload.pets;
         });
         builder.addCase(editUserInfo.rejected, (state, actions) => {
+            state.isLoading = false;
+            state.error = actions.payload;
+        });
+        builder.addCase(removePet.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+        });
+        builder.addCase(removePet.fulfilled, (state, actions) => {
+            state.isLoading = false;
+            state.error = null;
+            state.petsList = actions.payload.pets;
+            console.log(actions.payload)
+        });
+        builder.addCase(removePet.rejected, (state, actions) => {
             state.isLoading = false;
             state.error = actions.payload;
         });

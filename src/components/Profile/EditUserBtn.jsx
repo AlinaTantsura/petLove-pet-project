@@ -3,8 +3,11 @@ import Button from "../Button";
 import sprite from "../../assets/images/sprite.svg";
 import ModalEditUser from "./ModalEditUser";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/auth/authSelectors";
 
-const EditUserBtn = ({data}) => {
+const EditUserBtn = () => {
+  const data = useSelector(selectUser);
   const [openModal, setOpenModal] = useState(false);
   return (
     <>
