@@ -11,14 +11,17 @@ const PetsList = () => {
   const [idForRemove, setIdForRemove] = useState(null);
 
   useEffect(() => {
-    if(idForRemove) dispatch(removePet(idForRemove));
+    if (idForRemove) {
+      dispatch(removePet(idForRemove));
+      setIdForRemove(null)
+    }
   },[dispatch, idForRemove])
-
+  console.log(idForRemove)
   if (petsList.length === 0) return null;
   return (
     <ul className="flex flex-wrap gap-[14px]">
       {petsList.slice(0, 4).map(pet => (
-        <li key={pet._id}>
+        <li className="w-full md:w-[305px] xl:w-full" key={pet._id}>
           <PetCard data={pet} setIdForRemove={setIdForRemove} />
         </li>
       ))}

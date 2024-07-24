@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { editUserInfo, getAllUserInfo, getCurrentUser, loginUser, logoutUser, registerUser, removePet } from "./authOperations";
+import { addPet, editUserInfo, getAllUserInfo, getCurrentUser, loginUser, logoutUser, registerUser, removePet } from "./authOperations";
 import { getOurFriends } from "../ourFriends/ourFriendsOpertions";
 
 const authSlice = createSlice({
@@ -27,7 +27,19 @@ const authSlice = createSlice({
             state.user.token = actions.payload.token;
             localStorage.setItem("token", actions.payload.token);
         });
+        builder.addCase(logoutUser.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+        });
         builder.addCase(logoutUser.fulfilled, (state) => {
+            state.isLoading = false;
+            state.error = null;
+            state.user.token = "";
+            localStorage.setItem("token", "");
+        });
+        builder.addCase(logoutUser.rejected, (state, actions) => {
+            state.isLoading = false;
+            state.error = actions.payload;
             state.user.token = "";
             localStorage.setItem("token", "");
         });
@@ -82,6 +94,20 @@ const authSlice = createSlice({
             state.isLoading = false;
             state.error = actions.payload;
         });
+        builder.addCase(addPet.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+        });
+        builder.addCase(addPet.fulfilled, (state, actions) => {
+            state.isLoading = false;
+            state.error = null;
+            console.log(actions.payload)
+            // state.petsList = actions.payload.pets;
+        });
+        builder.addCase(addPet.rejected, (state, actions) => {
+            state.isLoading = false;
+            state.error = actions.payload;
+        });
         builder.addCase(removePet.pending, (state) => {
             state.isLoading = true;
             state.error = null;
@@ -90,7 +116,6 @@ const authSlice = createSlice({
             state.isLoading = false;
             state.error = null;
             state.petsList = actions.payload.pets;
-            console.log(actions.payload)
         });
         builder.addCase(removePet.rejected, (state, actions) => {
             state.isLoading = false;

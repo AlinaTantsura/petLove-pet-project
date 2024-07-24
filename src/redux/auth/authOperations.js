@@ -97,9 +97,9 @@ export const editUserInfo = createAsyncThunk(
 
 export const addPet = createAsyncThunk(
     "user/addPet",
-    async (editData, thunkAPI) => {
+    async (newPetData, thunkAPI) => {
         try {
-            const resp = await axios.patch('/users/current/edit', editData)
+            const resp = await axios.post('/users/pets/add', newPetData)
             return resp.data
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data.message)

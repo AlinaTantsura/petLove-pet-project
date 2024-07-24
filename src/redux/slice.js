@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getCities, getPetSex, getPetType } from "./notices/noticesOperations";
-import { loginUser, logoutUser, registerUser } from "./auth/authOperations";
+import { loginUser, registerUser } from "./auth/authOperations";
 import { getOurFriends } from "./ourFriends/ourFriendsOpertions";
 
 const commonSlice = createSlice({
@@ -34,18 +34,7 @@ const commonSlice = createSlice({
             state.isLoading = false;
             state.error = actions.payload;
         });
-        builder.addCase(logoutUser.pending, (state) => {
-            state.isLoading = true;
-            state.error = null;
-        });
-        builder.addCase(logoutUser.fulfilled, (state) => {
-            state.isLoading = false;
-            state.error = null;
-        });
-        builder.addCase(logoutUser.rejected, (state, actions) => {
-            state.isLoading = false;
-            state.error = actions.payload;
-        });
+        
         builder.addCase(getOurFriends.pending, (state) => {
             state.isLoading = true;
             state.error = null;

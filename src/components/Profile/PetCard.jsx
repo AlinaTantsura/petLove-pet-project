@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 import sprite from "../../assets/images/sprite.svg"
 
-const PetCard = ({data, setIdForRemove}) => {
+const PetCard = ({ data, setIdForRemove }) => {
+   
   return (
-      <div className="relative w-[295px] md:w-[305px] xl:w-auto flex gap-[14px] xl:gap-[25px] items-center border border-[rgba(38, 38, 38, 0.1)] rounded-[20px] py-4 md:py-[22px] px-4 xl:p-5">
+      <div className="relative w-full flex gap-[14px] xl:gap-[25px] items-center border border-[rgba(38, 38, 38, 0.1)] rounded-[20px] py-4 md:py-[22px] px-4 xl:p-5">
           <div className="w-[66px] md:w-[75px] xl:w-[90px] h-[66px] md:h-[75px] xl:h-[90px] rounded-full bg-white overflow-hidden">
               <img src={data.imgURL} alt={data.title} />
           </div>
