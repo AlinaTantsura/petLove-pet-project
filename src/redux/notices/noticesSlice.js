@@ -124,8 +124,16 @@ const noticesSlice = createSlice({
       state.isLoading = false;
       state.error = actions.payload;
     });
+    builder.addCase(getCurrentUser.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
     builder.addCase(getCurrentUser.fulfilled, (state, actions) => {
       state.favIds = actions.payload.map((item) => item._id);
+    });
+    builder.addCase(getCurrentUser.rejected, (state, actions) => {
+      state.isLoading = false;
+      state.error = actions.payload;
     });
   },
 });

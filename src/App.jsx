@@ -2,6 +2,7 @@
 import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
+import MyNotices from "./components/Profile/MyNotices";
 
 const Addpet = lazy(() => import("./pages/Addpetpage"))
 const Home = lazy(() => import("./pages/Homepage"))
@@ -23,7 +24,10 @@ function App() {
         <Route path="/friends" element={<Friends />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile />}>
+          <Route index element={<MyNotices />} />
+          <Route path="viewed" element={<MyNotices />} />
+        </Route>
         <Route path="/add-pet" element={<Addpet />} />
         <Route path="*" element={<Error />} />
       </Route>
