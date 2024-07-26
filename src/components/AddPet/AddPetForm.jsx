@@ -1,8 +1,14 @@
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import {useForm } from "react-hook-form";
 import sprite from "../../assets/images/sprite.svg";
 import clsx from "clsx";
+import Button from "../Button.jsx";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import CalendarBox from "./CalendarBox.jsx";
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
+
 
 const addPetSchema = yup.object().shape({
   title: yup.string().required(),
@@ -20,15 +26,25 @@ const addPetSchema = yup.object().shape({
 });
 
 const AddPetForm = () => {
+  const navigate = useNavigate();
+  const [sex, setSex] = useState();
+  const [openCalendar, setOpenCalendar] = useState(false);
+  // const dateReceived = watch("expiryAt");
   const {
     register,
     handleSubmit,
     // reset,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(addPetSchema) });
+    // } = useForm({ resolver: yupResolver(addPetSchema) });
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+  // console.log(errors);
   return (
     <section className="xl:w-[592px] bg-white rounded-[30px] md:rounded-[60px] p-4 pt-[25px] md:py-10 md:px-[136px] xl:py-[60px] xl:px-[80px]">
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <h2 className="mb-6 md:mb-10 font-bold text-[28px] md:text-[32px] leading-[100%] flex gap-2 items-end">
           Add my pet /
           <span className="text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] text-[#2B2B2A] text-opacity-40">
@@ -36,35 +52,52 @@ const AddPetForm = () => {
           </span>
         </h2>
         <div className="mb-2 md:mb-[-22px] flex gap-2">
-          <div
-            className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#F43F5E] bg-opacity-10 flex justify-center items-center"
-            {...register("radio")}
-            value="female"
+          <input className="hidden" {...register("sex", {onChange:(e)=> setSex(e.nativeEvent.target.value)}) } value="female" type="radio" id="female" />
+          <label
+            htmlFor="female"
+            className={clsx("w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#F43F5E] flex justify-center items-center",
+              sex === "female" ? "bg-opacity-1" : "bg-opacity-10"
+            )}
           >
-            <svg className="w-5 h-5 md:w-6 md:h-6">
+            <svg className={clsx("w-5 h-5 md:w-6 md:h-6",
+              sex === "female" ? "stroke-white" : "stroke-[#F43F5E]"
+            )}>
               <use href={sprite + "#icon-female"} />
             </svg>
-          </div>
-          <div
-            className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#54ADFF] bg-opacity-10 flex justify-center items-center"
-            {...register("radio")}
-            value="male"
+          </label>
+          <input className="hidden" {...register("sex")} value="male" type="radio" id="male" />
+          <label
+            htmlFor="male"
+            className={clsx("w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#54ADFF] flex justify-center items-center",
+              sex === "male" ? "bg-opacity-1" : "bg-opacity-10"
+            )}
           >
-            <svg className="w-5 h-5 md:w-6 md:h-6">
+            <svg className={clsx("w-5 h-5 md:w-6 md:h-6",
+              sex === "male" ? "stroke-white" : "stroke-[#54ADFF]"
+            )}>
               <use href={sprite + "#icon-male"} />
             </svg>
-          </div>
-          <div
-            className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-orange-main bg-opacity-10 flex justify-center items-center"
-            {...register("radio")}
+          </label>
+          <input className="hidden"
+            {...register("sex")}
             value="unknown"
+            type="radio"
+            id="unknown"
+          />
+          <label
+            htmlFor="unknown"
+            className={clsx("w-8 h-8 md:w-10 md:h-10 rounded-full bg-orange-main flex justify-center items-center",
+              sex === "unknown" ? "bg-opacity-1" : "bg-opacity-10"
+            )}
           >
-            <svg className="w-5 h-5 md:w-6 md:h-6">
+            <svg className={clsx("w-5 h-5 md:w-6 md:h-6",
+              sex === "unknown" ? "fill-white" : "fill-orange-main"
+            )}>
               <use
                 href={sprite + "#icon-healthicons_sexual-reproductive-health"}
               />
             </svg>
-          </div>
+          </label>
         </div>
         <div className="mx-auto mb-4 md:mb-3 w-[68px] md:w-[86px] h-[68px] md:h-[86px] rounded-full bg-[#fff4df] flex justify-center items-center">
           <svg className="w-[34px] h-[34px] md:w-[44px] md:h-[44px]">
@@ -88,7 +121,7 @@ const AddPetForm = () => {
               />
               {errors.imgUrl && (
                 <>
-                  <svg className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] absolute top-[12px] md:top-[15px] right-[12px] md:right-[19px] ">
+                  <svg className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] absolute top-[10px] right-[12px] md:right-[16px] ">
                     <use href={sprite + "#icon-cross-small"} />
                   </svg>
                   <span className="ml-4 text-[10px] md:text-[12px] leading-[120%] md:leading-[117%] text-error-color">
@@ -97,7 +130,7 @@ const AddPetForm = () => {
                 </>
               )}
             </div>
-            <button className="rounded-[30px] bg-[#fff4df] p-[10px] md:px-4 md:py-3 flex gap-[5px] items-center justify-center text-[12px] md:text-[14px] leading-[133%] md:leading-[129%] tracking-[-0.02em] text-black-main">
+            <button className="rounded-[30px] h-[36px] md:h-[42px] bg-[#fff4df] p-[10px] md:px-4 md:py-3 flex gap-[5px] items-center justify-center text-[12px] md:text-[14px] leading-[133%] md:leading-[129%] tracking-[-0.02em] text-black-main">
               Upload photo
               <svg className="w-[16px] h-[16px] md:w-[18px] md:h-[18px]">
                 <use href={sprite + "#icon-upload-cloud"} />
@@ -148,9 +181,9 @@ const AddPetForm = () => {
               </>
             )}
           </li>
-          <li className="flex gap-2">
+          <li className="flex gap-2 md:gap-3">
             <div className="relative min-w-[144px]">
-              <input
+              {/* <input
                 className={clsx(
                   "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50",
                   // userData.name && "border-orange-main",
@@ -160,22 +193,53 @@ const AddPetForm = () => {
                 placeholder="00.00.0000"
                 {...register("birthday")}
               />
-              <svg className="w-[18px] h-[18px] absolute top-3 right-3">
+              <svg className="w-[18px] h-[18px] md:w-5 md:h-5 absolute top-3 md:top-4 right-3 md:right-4">
+                <use href={sprite + "#icon-calendar"} />
+              </svg> */}
+              <input
+                className={clsx(
+                  "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50 cursor-mouse",
+                  // userData.name && "border-orange-main",
+                  errors.name && "border-error-color",
+                  "date-input"
+                )}
+                type="text"
+                placeholder="0000-00-00"
+              onClick={()=> setOpenCalendar(!openCalendar)}
+                {...register("birthday")}
+              />
+              <svg className="w-[18px] h-[18px] md:w-5 md:h-5 absolute top-3 md:top-4 right-3 md:right-4 pointer-events-none">
                 <use href={sprite + "#icon-calendar"} />
               </svg>
-            </div>
+                <CalendarBox open={openCalendar} />
+     </div>
             <div className="relative">
               <input
                 className="w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50"
                 placeholder="Type of pet"
-                {...register("type")}
+                {...register("species")}
               />
-              <svg className="absolute top-3 right-3 w-[18px] h-[18px]">
+              <svg className="w-[18px] h-[18px] md:w-5 md:h-5 absolute top-3 md:top-[18px] right-3 md:right-4">
                 <use href={sprite + "#icon-chevron-down"} />
               </svg>
             </div>
           </li>
         </ul>
+        <div className="mt-[31px] md:mt-[46px] xl:mt-[40px] flex gap-2 justify-end">
+          <Button
+            onClick={() => navigate("/profile")}
+            className="rounded-[30px] px-[34px] md:px-[67px] py-3 md:py-[14px] bg-black-main bg-opacity-5 font-bold text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] text-black-main"
+            type="button"
+          >
+            Back
+          </Button>
+          <Button
+            className="rounded-[30px] px-[26px] md:px-[58px] py-3 md:py-[14px] bg-orange-main font-bold text-white text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]"
+            type="submit"
+          >
+            Submit
+          </Button>
+        </div>
       </form>
     </section>
   );

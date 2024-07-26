@@ -101,7 +101,7 @@ const authSlice = createSlice({
         builder.addCase(addPet.fulfilled, (state, actions) => {
             state.isLoading = false;
             state.error = null;
-            console.log(actions.payload)
+            // console.log(actions.payload)
             // state.petsList = actions.payload.pets;
         });
         builder.addCase(addPet.rejected, (state, actions) => {
