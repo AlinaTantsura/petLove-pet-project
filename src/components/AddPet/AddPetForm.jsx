@@ -7,8 +7,6 @@ import Button from "../Button.jsx";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import CalendarBox from "./CalendarBox.jsx";
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
-
 
 const addPetSchema = yup.object().shape({
   title: yup.string().required(),
@@ -29,7 +27,7 @@ const AddPetForm = () => {
   const navigate = useNavigate();
   const [sex, setSex] = useState();
   const [openCalendar, setOpenCalendar] = useState(false);
-  // const dateReceived = watch("expiryAt");
+  const [date, setDate] = useState(new Date());
   const {
     register,
     handleSubmit,
@@ -41,7 +39,6 @@ const AddPetForm = () => {
   const onSubmit = (data) => {
     console.log(data);
   };
-  // console.log(errors);
   return (
     <section className="xl:w-[592px] bg-white rounded-[30px] md:rounded-[60px] p-4 pt-[25px] md:py-10 md:px-[136px] xl:py-[60px] xl:px-[80px]">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -198,20 +195,21 @@ const AddPetForm = () => {
               </svg> */}
               <input
                 className={clsx(
-                  "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50 cursor-mouse",
+                  "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50 cursor-default",
                   // userData.name && "border-orange-main",
                   errors.name && "border-error-color",
                   "date-input"
                 )}
                 type="text"
                 placeholder="0000-00-00"
+                value={`${date.getFullYear()}-${date.getMonth() > 8 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)}-${date.getDate() > 9 ? date.getDate() : "0" + date.getDate()}`}
               onClick={()=> setOpenCalendar(!openCalendar)}
                 {...register("birthday")}
               />
               <svg className="w-[18px] h-[18px] md:w-5 md:h-5 absolute top-3 md:top-4 right-3 md:right-4 pointer-events-none">
                 <use href={sprite + "#icon-calendar"} />
               </svg>
-                <CalendarBox open={openCalendar} />
+              <CalendarBox open={openCalendar} date={date} setDate={setDate} />
      </div>
             <div className="relative">
               <input
