@@ -1,12 +1,16 @@
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import sprite from "../../assets/images/sprite.svg";
 import clsx from "clsx";
 import Button from "../Button.jsx";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CalendarBox from "./CalendarBox.jsx";
+import PetTypeMenu from "./PetTypeMenu.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { selectPetTypes } from "../../redux/notices/noticesSelectors.js";
+import { getPetType } from "../../redux/notices/noticesOperations.js";
 
 const addPetSchema = yup.object().shape({
   title: yup.string().required(),
@@ -25,18 +29,30 @@ const addPetSchema = yup.object().shape({
 
 const AddPetForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const types = useSelector(selectPetTypes);
   const [sex, setSex] = useState();
   const [openCalendar, setOpenCalendar] = useState(false);
+  const [openPetTypeMenu, setOpenPetTypeMenu] = useState(false);
+  const [type, setType] = useState("");
+  const [urlFieldValue, setUrlFieldValue] = useState("");
+  const [titleFieldValue, setTitleFieldValue] = useState("");
+  const [nameFieldValue, setNameFieldValue] = useState("");
   const [date, setDate] = useState(new Date());
   const {
     register,
     handleSubmit,
     // reset,
     formState: { errors },
-    // } = useForm({ resolver: yupResolver(addPetSchema) });
-  } = useForm();
+  } = useForm({ resolver: yupResolver(addPetSchema) });
+  // } = useForm();
+
+  useEffect(() => {
+    if (!types) dispatch(getPetType());
+  }, [dispatch, types]);
 
   const onSubmit = (data) => {
+    data.species = data.species.toLowerCase();
     console.log(data);
   };
   return (
@@ -49,33 +65,56 @@ const AddPetForm = () => {
           </span>
         </h2>
         <div className="mb-2 md:mb-[-22px] flex gap-2">
-          <input className="hidden" {...register("sex", {onChange:(e)=> setSex(e.nativeEvent.target.value)}) } value="female" type="radio" id="female" />
+          <input
+            className="hidden"
+            {...register("sex", {
+              onChange: (e) => setSex(e.nativeEvent.target.value),
+            })}
+            value="female"
+            type="radio"
+            id="female"
+          />
           <label
             htmlFor="female"
-            className={clsx("w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#F43F5E] flex justify-center items-center",
+            className={clsx(
+              "w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#F43F5E] flex justify-center items-center",
               sex === "female" ? "bg-opacity-1" : "bg-opacity-10"
             )}
           >
-            <svg className={clsx("w-5 h-5 md:w-6 md:h-6",
-              sex === "female" ? "stroke-white" : "stroke-[#F43F5E]"
-            )}>
+            <svg
+              className={clsx(
+                "w-5 h-5 md:w-6 md:h-6",
+                sex === "female" ? "stroke-white" : "stroke-[#F43F5E]"
+              )}
+            >
               <use href={sprite + "#icon-female"} />
             </svg>
           </label>
-          <input className="hidden" {...register("sex")} value="male" type="radio" id="male" />
+          <input
+            className="hidden"
+            {...register("sex")}
+            value="male"
+            type="radio"
+            id="male"
+          />
           <label
             htmlFor="male"
-            className={clsx("w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#54ADFF] flex justify-center items-center",
+            className={clsx(
+              "w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#54ADFF] flex justify-center items-center",
               sex === "male" ? "bg-opacity-1" : "bg-opacity-10"
             )}
           >
-            <svg className={clsx("w-5 h-5 md:w-6 md:h-6",
-              sex === "male" ? "stroke-white" : "stroke-[#54ADFF]"
-            )}>
+            <svg
+              className={clsx(
+                "w-5 h-5 md:w-6 md:h-6",
+                sex === "male" ? "stroke-white" : "stroke-[#54ADFF]"
+              )}
+            >
               <use href={sprite + "#icon-male"} />
             </svg>
           </label>
-          <input className="hidden"
+          <input
+            className="hidden"
             {...register("sex")}
             value="unknown"
             type="radio"
@@ -83,13 +122,17 @@ const AddPetForm = () => {
           />
           <label
             htmlFor="unknown"
-            className={clsx("w-8 h-8 md:w-10 md:h-10 rounded-full bg-orange-main flex justify-center items-center",
+            className={clsx(
+              "w-8 h-8 md:w-10 md:h-10 rounded-full bg-orange-main flex justify-center items-center",
               sex === "unknown" ? "bg-opacity-1" : "bg-opacity-10"
             )}
           >
-            <svg className={clsx("w-5 h-5 md:w-6 md:h-6",
-              sex === "unknown" ? "fill-white" : "fill-orange-main"
-            )}>
+            <svg
+              className={clsx(
+                "w-5 h-5 md:w-6 md:h-6",
+                sex === "unknown" ? "fill-white" : "fill-orange-main"
+              )}
+            >
               <use
                 href={sprite + "#icon-healthicons_sexual-reproductive-health"}
               />
@@ -107,14 +150,16 @@ const AddPetForm = () => {
               <input
                 className={clsx(
                   "w-full px-[10px] py-[9px] md:p-3 border border-border-black rounded-[30px] outline-none text-[14px] leading-[129%] tracking-[-0.02em] placeholder:text-black-main placeholder:text-opacity-50",
-                  //   userData.avatar && "border-orange-main",
+                  !errors.imgUrl &&
+                    urlFieldValue !== "" &&
+                    "border-orange-main",
                   errors.imgUrl && "border-error-color"
                 )}
                 type="text"
-                // value={userData.avatar || "Avatar URL"}
-                // defaultValue={userData.avatar || ""}
                 placeholder="Enter URL"
-                {...register("imgUrl")}
+                {...register("imgUrl", {
+                  onChange: (e) => setUrlFieldValue(e.target.value),
+                })}
               />
               {errors.imgUrl && (
                 <>
@@ -138,12 +183,12 @@ const AddPetForm = () => {
             <input
               className={clsx(
                 "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50",
-                // userData.name && "border-orange-main",
+                (titleFieldValue !== "" && !errors.title) && "border-orange-main",
                 errors.title && "border-error-color"
               )}
               type="text"
               placeholder="Title"
-              {...register("title")}
+              {...register("title", {onChange: (e) => setTitleFieldValue(e.target.value)})}
             />
             {errors.title && (
               <>
@@ -160,12 +205,12 @@ const AddPetForm = () => {
             <input
               className={clsx(
                 "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50",
-                // userData.name && "border-orange-main",
+                (nameFieldValue !== "" && !errors.name) && "border-orange-main",
                 errors.name && "border-error-color"
               )}
               type="text"
               placeholder="Pet's Name"
-              {...register("name")}
+              {...register("name", {onChange: (e) => setNameFieldValue(e.target.value)})}
             />
             {errors.name && (
               <>
@@ -197,29 +242,49 @@ const AddPetForm = () => {
                 className={clsx(
                   "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50 cursor-default",
                   // userData.name && "border-orange-main",
-                  errors.name && "border-error-color",
+                  errors.birthday ? "border-error-color" : "border-orange-main",
                   "date-input"
                 )}
                 type="text"
                 placeholder="0000-00-00"
-                value={`${date.getFullYear()}-${date.getMonth() > 8 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)}-${date.getDate() > 9 ? date.getDate() : "0" + date.getDate()}`}
-              onClick={()=> setOpenCalendar(!openCalendar)}
+                value={`${date.getFullYear()}-${
+                  date.getMonth() > 8
+                    ? date.getMonth() + 1
+                    : "0" + (date.getMonth() + 1)
+                }-${
+                  date.getDate() > 9 ? date.getDate() : "0" + date.getDate()
+                }`}
+                onClick={() => setOpenCalendar(!openCalendar)}
                 {...register("birthday")}
               />
               <svg className="w-[18px] h-[18px] md:w-5 md:h-5 absolute top-3 md:top-4 right-3 md:right-4 pointer-events-none">
                 <use href={sprite + "#icon-calendar"} />
               </svg>
               <CalendarBox open={openCalendar} date={date} setDate={setDate} />
-     </div>
+            </div>
             <div className="relative">
               <input
-                className="w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50"
+                type="text"
+                onClick={() => setOpenPetTypeMenu(!openPetTypeMenu)}
+                className="w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50 cursor-default"
                 placeholder="Type of pet"
+                value={type}
                 {...register("species")}
               />
-              <svg className="w-[18px] h-[18px] md:w-5 md:h-5 absolute top-3 md:top-[18px] right-3 md:right-4">
+              <svg
+                className={clsx(
+                  "w-[18px] h-[18px] md:w-5 md:h-5 absolute top-3 md:top-[18px] right-3 md:right-4 pointer-events-none",
+                  openPetTypeMenu && "rotate-180"
+                )}
+              >
                 <use href={sprite + "#icon-chevron-down"} />
               </svg>
+              <PetTypeMenu
+                open={openPetTypeMenu}
+                types={types}
+                onClose={() => setOpenPetTypeMenu(false)}
+                setType={setType}
+              />
             </div>
           </li>
         </ul>
