@@ -30,6 +30,7 @@ const Header = () => {
       >
         <Link
           to="/"
+          onClick={()=>setIsOpenMenu(false)}
           className={clsx(
             "font-bold text-[20px] md:text-[28px] leading-[100%] tracking-[-0.04em] flex items-end",
             isHome ? "text-white" : "text-black-main"
@@ -51,11 +52,11 @@ const Header = () => {
           isHome && isLogin && "xl:w-[65%] xl:justify-between"
         )}>
           <div className="hidden xl:block">
-            <Navigation isHome={isHome} />
+            <Navigation isHome={isHome} onCloseMenu={setIsOpenMenu} />
           </div>
           <div className="flex gap-4 items-center">
             <div className="hidden md:block">
-              <AuthNav isHome={isHome} isHeader="true" />
+              <AuthNav isHome={isHome} isHeader="true" onCloseMenu={setIsOpenMenu} />
             </div>
             <button
               className="w-[32px] md:w-[36px] h-[32px] md:h-[36px] xl:hidden"
@@ -74,7 +75,7 @@ const Header = () => {
           </div>
         </div>
       </header>
-      {isOpenMenu && <MenuBar onClose={() => setIsOpenMenu(false)} />}
+      {isOpenMenu && <MenuBar onClose={() => setIsOpenMenu(false)} open={isOpenMenu} />}
     </>
   );
 };

@@ -3,15 +3,17 @@ import Button from "./Button";
 import sprite from "../assets/images/sprite.svg";
 import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectUser } from "../redux/auth/authSelectors";
-import { logoutUser } from "../redux/auth/authOperations";
+import ModalApproveAction from "./Profile/ModalApproveAction";
+import { useState } from "react";
 
-const AuthNav = ({ isHome, isHeader }) => {
+const AuthNav = ({ isHome, isHeader, onCloseMenu }) => {
   const { token } = useSelector(selectUser);
+  const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const isLogin = Boolean(token);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
   return (
     <div className="font-bold text-[16px]">
       {isLogin ? (
@@ -23,7 +25,7 @@ const AuthNav = ({ isHome, isHeader }) => {
           )}
         >
           <Button
-            onClick={() => dispatch(logoutUser())}
+            onClick={()=>setOpenLogoutModal(true)}
             className={clsx(
               "w-full md:w-auto px-[35px] py-[15px] rounded-[30px] bg-orange-main hover:bg-[#f9b020] font-bold text-white text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]",
               isHome && isHeader && "hidden",
@@ -32,7 +34,9 @@ const AuthNav = ({ isHome, isHeader }) => {
           >
             LOG OUT
           </Button>
+          <ModalApproveAction open={openLogoutModal} onClose={() => setOpenLogoutModal(false)} />
           <Link to="/profile"
+            onClick={()=>onCloseMenu(false)}
             className={clsx(
               "flex gap-2 items-center",
               !isHeader && "md:hidden"

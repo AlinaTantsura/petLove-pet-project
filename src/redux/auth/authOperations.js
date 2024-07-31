@@ -99,7 +99,7 @@ export const addPet = createAsyncThunk(
     "user/addPet",
     async (newPetData, thunkAPI) => {
         try {
-            const resp = await axios.post('/users/pets/add', newPetData)
+            const resp = await axios.post('/users/current/pets/add', newPetData)
             return resp.data
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data.message)

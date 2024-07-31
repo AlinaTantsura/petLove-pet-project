@@ -11,14 +11,15 @@ import PetTypeMenu from "./PetTypeMenu.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPetTypes } from "../../redux/notices/noticesSelectors.js";
 import { getPetType } from "../../redux/notices/noticesOperations.js";
+import { addPet } from "../../redux/auth/authOperations.js";
 
 const addPetSchema = yup.object().shape({
   title: yup.string().required(),
   name: yup.string().required(),
-  imgUrl: yup
+  imgURL: yup
     .string()
     .required()
-    .matches(/^https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp)$/),
+    .matches(/^https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp)$/, "URL doesn't match"),
   species: yup.string().required(),
   birthday: yup
     .string()
@@ -42,10 +43,8 @@ const AddPetForm = () => {
   const {
     register,
     handleSubmit,
-    // reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(addPetSchema) });
-  // } = useForm();
 
   useEffect(() => {
     if (!types) dispatch(getPetType());
@@ -53,7 +52,8 @@ const AddPetForm = () => {
 
   const onSubmit = (data) => {
     data.species = data.species.toLowerCase();
-    console.log(data);
+    dispatch(addPet(data));
+    navigate("/profile")
   };
   return (
     <section className="xl:w-[592px] bg-white rounded-[30px] md:rounded-[60px] p-4 pt-[25px] md:py-10 md:px-[136px] xl:py-[60px] xl:px-[80px]">
@@ -64,7 +64,7 @@ const AddPetForm = () => {
             Personal details
           </span>
         </h2>
-        <div className="mb-2 md:mb-[-22px] flex gap-2">
+        <div className="relative mb-2 md:mb-[-22px] flex gap-2">
           <input
             className="hidden"
             {...register("sex", {
@@ -138,6 +138,13 @@ const AddPetForm = () => {
               />
             </svg>
           </label>
+          {errors.sex && (
+              
+                <span className="absolute left-0 top-[48px] ml-4 text-[10px] md:text-[12px] leading-[120%] md:leading-[117%] text-error-color">
+                  {errors.sex.message}
+                </span>
+            
+            )}
         </div>
         <div className="mx-auto mb-4 md:mb-3 w-[68px] md:w-[86px] h-[68px] md:h-[86px] rounded-full bg-[#fff4df] flex justify-center items-center">
           <svg className="w-[34px] h-[34px] md:w-[44px] md:h-[44px]">
@@ -149,30 +156,30 @@ const AddPetForm = () => {
             <div className="relative w-[170px] md:w-[278px]">
               <input
                 className={clsx(
-                  "w-full px-[10px] py-[9px] md:p-3 border border-border-black rounded-[30px] outline-none text-[14px] leading-[129%] tracking-[-0.02em] placeholder:text-black-main placeholder:text-opacity-50",
-                  !errors.imgUrl &&
+                  "w-full px-[10px] pr-[40px] py-[9px] md:p-3 md:pr-[45px] border border-border-black rounded-[30px] outline-none text-[14px] leading-[129%] tracking-[-0.02em] placeholder:text-black-main placeholder:text-opacity-50",
+                  !errors.imgURL &&
                     urlFieldValue !== "" &&
                     "border-orange-main",
-                  errors.imgUrl && "border-error-color"
+                  errors.imgURL && "border-error-color"
                 )}
                 type="text"
                 placeholder="Enter URL"
-                {...register("imgUrl", {
+                {...register("imgURL", {
                   onChange: (e) => setUrlFieldValue(e.target.value),
                 })}
               />
-              {errors.imgUrl && (
+              {errors.imgURL && (
                 <>
-                  <svg className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] absolute top-[10px] right-[12px] md:right-[16px] ">
+                  <svg className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] absolute top-[10px] right-[12px] md:right-[16px]">
                     <use href={sprite + "#icon-cross-small"} />
                   </svg>
                   <span className="ml-4 text-[10px] md:text-[12px] leading-[120%] md:leading-[117%] text-error-color">
-                    {errors.imgUrl.message}
+                    {errors.imgURL.message}
                   </span>
                 </>
               )}
             </div>
-            <button className="rounded-[30px] h-[36px] md:h-[42px] bg-[#fff4df] p-[10px] md:px-4 md:py-3 flex gap-[5px] items-center justify-center text-[12px] md:text-[14px] leading-[133%] md:leading-[129%] tracking-[-0.02em] text-black-main">
+            <button type="button" className="rounded-[30px] h-[36px] md:h-[42px] bg-[#fff4df] p-[10px] md:px-4 md:py-3 flex gap-[5px] items-center justify-center text-[12px] md:text-[14px] leading-[133%] md:leading-[129%] tracking-[-0.02em] text-black-main">
               Upload photo
               <svg className="w-[16px] h-[16px] md:w-[18px] md:h-[18px]">
                 <use href={sprite + "#icon-upload-cloud"} />

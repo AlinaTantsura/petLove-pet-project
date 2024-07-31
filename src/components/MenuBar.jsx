@@ -4,9 +4,20 @@ import sprite from "../assets/images/sprite.svg";
 import Navigation from "./Navigation";
 import AuthNav from "./AuthNav";
 import clsx from "clsx";
-const MenuBar = ({ onClose }) => {
+const MenuBar = ({ onClose, open }) => {
   const { pathname } = useLocation();
   const isMobileHome = pathname === "/" ? true : false;
+  // useEffect(() => {
+  //       const handleCloseModalByEsc = (e) => {
+  //           if(e.key === "Escape") onClose(false)
+  //       }
+  //       document.addEventListener("keyup", handleCloseModalByEsc);
+       
+  //       return () => {
+  //           document.removeEventListener("keyup", handleCloseModalByEsc);
+  //       }
+  //   }, [onClose]);
+  if(!open) return null
   return (
     <div
       className={clsx(
@@ -18,9 +29,12 @@ const MenuBar = ({ onClose }) => {
         onClick={onClose}
         className="absolute right-5 md:right-8 w-8 h-8 md:w-9 md:h-9"
       >
-              <svg className={clsx("w-8 h-8 md:w-9 md:h-9",
-                  isMobileHome ? "stroke-black-main" : "stroke-white"
-              )}>
+        <svg
+          className={clsx(
+            "w-8 h-8 md:w-9 md:h-9",
+            isMobileHome ? "stroke-black-main" : "stroke-white"
+          )}
+        >
           <use href={sprite + "#icon-x"} />
         </svg>
       </button>

@@ -19,7 +19,6 @@ const newsSlice = createSlice({
             state.error = null;
             state.news = actions.payload.results;
             state.lastPage = actions.payload.totalPages;
-            console.log(state.lastPage)
         });
         builder.addCase(getNews.rejected, (state, actions) => {
             state.isLoading = false;

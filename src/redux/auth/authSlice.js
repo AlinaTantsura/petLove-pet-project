@@ -19,13 +19,33 @@ const authSlice = createSlice({
         error: null
     },
     extraReducers: (builder) => {
+        builder.addCase(registerUser.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+        });
         builder.addCase(registerUser.fulfilled, (state, actions) => {
+            state.isLoading = false;
+            state.error = null;
             state.user.token = actions.payload.token;
             localStorage.setItem("token", actions.payload.token);
         });
+        builder.addCase(registerUser.rejected, (state, actions) => {
+            state.isLoading = false;
+            state.error = actions.payload;
+        });
+        builder.addCase(loginUser.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+        });
         builder.addCase(loginUser.fulfilled, (state, actions) => {
+            state.isLoading = false;
+            state.error = null;
             state.user.token = actions.payload.token;
             localStorage.setItem("token", actions.payload.token);
+        });
+        builder.addCase(loginUser.rejected, (state, actions) => {
+            state.isLoading = false;
+            state.error = actions.payload;
         });
         builder.addCase(logoutUser.pending, (state) => {
             state.isLoading = true;
@@ -43,8 +63,18 @@ const authSlice = createSlice({
             state.user.token = "";
             localStorage.setItem("token", "");
         });
+        builder.addCase(getOurFriends.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+        });
         builder.addCase(getOurFriends.fulfilled, (state, actions) => {
+            state.isLoading = false;
+            state.error = null;
             state.friends = actions.payload;
+        });
+        builder.addCase(getOurFriends.rejected, (state, actions) => {
+            state.isLoading = false;
+            state.error = actions.payload;
         });
         builder.addCase(getCurrentUser.pending, (state) => {
             state.isLoading = true;
@@ -66,7 +96,6 @@ const authSlice = createSlice({
         builder.addCase(getAllUserInfo.fulfilled, (state, actions) => {
             state.isLoading = false;
             state.error = null;
-            console.log(actions.payload)
             state.user.avatar = actions.payload.avatar;
             state.user.name = actions.payload.name;
             state.user.email = actions.payload.email;
@@ -98,7 +127,7 @@ const authSlice = createSlice({
             state.isLoading = true;
             state.error = null;
         });
-        builder.addCase(addPet.fulfilled, (state, actions) => {
+        builder.addCase(addPet.fulfilled, (state) => {
             state.isLoading = false;
             state.error = null;
             // console.log(actions.payload)
@@ -121,7 +150,6 @@ const authSlice = createSlice({
             state.isLoading = false;
             state.error = actions.payload;
         });
-        
     }
 });
 
