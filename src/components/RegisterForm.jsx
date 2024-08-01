@@ -49,12 +49,12 @@ const RegisterForm = () => {
 
   return (
     <form
-      className="min-w-full h-[422px] md:min-w-full md:h-[560px] xl:min-w-[592px] xl:max-w-[592px] xl:h-[654px] px-2 flex justify-center items-center bg-white rounded-[30px] md:rounded-[60px]"
+      className="min-w-full h-[422px] md:min-w-full md:min-h-[560px] xl:min-w-[592px] xl:max-w-[592px] xl:h-[654px] px-2 flex justify-center items-center bg-white rounded-[30px] md:rounded-[60px]"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="w-[295px] md:w-[424px]">
       <Title>Registration</Title>          
-        <p className="mb-[20px] md:mb-8 text-[14px] md:text-[18px] leading-[122%] tracking-[-0.02em]">
+        <p className="mb-[20px] md:mb-8 mt-3 md:mt-4 text-[14px] md:text-[18px] leading-[122%] tracking-[-0.02em]">
           Thank you for your interest in our platform.
         </p>
         <div className="relative">
@@ -200,7 +200,7 @@ const RegisterForm = () => {
         </Button>
         <p className="leading-[117%] md:leading-[143%] text-opacity-black text-[12px] md:text-[14px] text-center">
           Already have an account?
-          <Link to="/register" className="ml-1 text-orange-main underline">
+          <Link to="/login" className="ml-1 text-orange-main underline">
             Login
           </Link>
         </p>

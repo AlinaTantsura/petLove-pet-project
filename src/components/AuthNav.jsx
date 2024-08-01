@@ -5,15 +5,17 @@ import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/auth/authSelectors";
-import ModalApproveAction from "./Profile/ModalApproveAction";
-import { useState } from "react";
 
-const AuthNav = ({ isHome, isHeader, onCloseMenu }) => {
+const AuthNav = ({ isHome, isHeader, openLogoutWindow, isOpenMenu, onCloseMenu }) => {
   const { token } = useSelector(selectUser);
-  const [openLogoutModal, setOpenLogoutModal] = useState(false);
+  
   const isLogin = Boolean(token);
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    openLogoutWindow();
+    if(isOpenMenu) onCloseMenu();
+  }
   return (
     <div className="font-bold text-[16px]">
       {isLogin ? (
@@ -25,7 +27,7 @@ const AuthNav = ({ isHome, isHeader, onCloseMenu }) => {
           )}
         >
           <Button
-            onClick={()=>setOpenLogoutModal(true)}
+            onClick={handleLogout}
             className={clsx(
               "w-full md:w-auto px-[35px] py-[15px] rounded-[30px] bg-orange-main hover:bg-[#f9b020] font-bold text-white text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]",
               isHome && isHeader && "hidden",
@@ -34,9 +36,9 @@ const AuthNav = ({ isHome, isHeader, onCloseMenu }) => {
           >
             LOG OUT
           </Button>
-          <ModalApproveAction open={openLogoutModal} onClose={() => setOpenLogoutModal(false)} />
+          
           <Link to="/profile"
-            onClick={()=>onCloseMenu(false)}
+            onClick={onCloseMenu}
             className={clsx(
               "flex gap-2 items-center",
               !isHeader && "md:hidden"
@@ -60,7 +62,7 @@ const AuthNav = ({ isHome, isHeader, onCloseMenu }) => {
       ) : (
         <div className="flex flex-col md:flex-row gap-2 items-center justify-center xl:ml-[142px]">
           <Button
-            onClick={() => navigate("/login")}
+              onClick={() => { navigate("/login"); if (isOpenMenu) onCloseMenu(false) }}
             className={clsx(
               "w-full md:w-auto px-[35px] py-[15px] rounded-[30px] bg-orange-main hover:bg-[#f9b020] font-bold text-white text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]",
               isHome && " border border-solid border-border-white"
@@ -69,7 +71,7 @@ const AuthNav = ({ isHome, isHeader, onCloseMenu }) => {
             LOG IN
           </Button>
           <Button
-            onClick={() => navigate("/register")}
+              onClick={() => { navigate("/register"); if (isOpenMenu) onCloseMenu(false) }}
             className="w-full md:w-auto px-5 py-[15px] rounded-[30px] bg-[#fff4df] hover:bg-[#fbe7c1] text-orange-main font-bold text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]"
           >
             REGISTRATION

@@ -7,9 +7,11 @@ import MenuBar from "./MenuBar";
 import clsx from "clsx";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/auth/authSelectors";
+import ModalApproveAction from "./Profile/ModalApproveAction";
 
 const Header = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const location = useLocation();
   const { token } = useSelector(selectUser);
   const isLogin = Boolean(token);
@@ -56,7 +58,7 @@ const Header = () => {
           </div>
           <div className="flex gap-4 items-center">
             <div className="hidden md:block">
-              <AuthNav isHome={isHome} isHeader="true" onCloseMenu={setIsOpenMenu} />
+              <AuthNav isHome={isHome} isHeader="true" isOpenMenu={isOpenMenu} openLogoutWindow={() => setOpenLogoutModal(true)}/>
             </div>
             <button
               className="w-[32px] md:w-[36px] h-[32px] md:h-[36px] xl:hidden"
@@ -75,7 +77,8 @@ const Header = () => {
           </div>
         </div>
       </header>
-      {isOpenMenu && <MenuBar onClose={() => setIsOpenMenu(false)} open={isOpenMenu} />}
+      {isOpenMenu && <MenuBar onClose={() => setIsOpenMenu(false)} open={isOpenMenu} openLogoutWindow={() => setOpenLogoutModal(true)}/>}
+      <ModalApproveAction open={openLogoutModal} onClose={() => setOpenLogoutModal(false)}/>
     </>
   );
 };

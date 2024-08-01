@@ -7,8 +7,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
 import { useState } from "react";
 import Title from "./Title";
-import { useDispatch } from "react-redux";
+import { useDispatch} from "react-redux";
 import { loginUser } from "../redux/auth/authOperations";
+
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -28,13 +29,14 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
     reset,
   } = useForm({ resolver: yupResolver(loginSchema) });
-  const onSubmit = (data) => {
-    dispatch(loginUser(data))
+  const onSubmit = async(data) => {
+    dispatch(loginUser(data));
     reset();
   };
+
   return (
     <form
       className="min-w-full h-[422px] md:min-w-full md:h-[560px] xl:min-w-[592px] xl:max-w-[592px] xl:h-[654px] px-2 flex justify-center items-center bg-white rounded-[30px] md:rounded-[60px]"
@@ -42,7 +44,7 @@ const LoginForm = () => {
     >
       <div className="w-[295px] md:w-[424px]">
         <Title>Log in</Title>
-        <p className="mb-6 md:mb-8 text-[14px] md:text-[18px] leading-[122%] tracking-[-0.02em]">
+        <p className="mb-6 md:mb-8 mt-3 md:mt-4 text-[14px] md:text-[18px] leading-[122%] tracking-[-0.02em]">
           Welcome! Please enter your credentials to login to the platform:
         </p>
         <div className="relative ">
