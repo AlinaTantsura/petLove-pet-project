@@ -5,16 +5,22 @@ import { useSelector } from "react-redux";
 import { selectError, selectIsLoading } from "../redux/auth/authSelectors";
 import { Loader } from "./Loader";
 import { Store } from "react-notifications-component";
+import { selectErrorNews } from "../redux/news/newsSelectors";
+import { selectOurFriendsError, selectOurFriendsIsLoading } from "../redux/ourFriends/ourFriendsSelectors";
 
 const Layout = () => {
-  const isLoading = useSelector(selectIsLoading);
+  // const isLoading = useSelector(selectIsLoading);
+  const isLoading = useSelector(selectOurFriendsIsLoading);
   const requestError = useSelector(selectError);
-  console.log(requestError)
+  const newsError = useSelector(selectErrorNews);
+  const friendsError = useSelector(selectOurFriendsError);
+  // console.log(requestError)
+
   useEffect(() => {
-    if (requestError) {
+    if (requestError || newsError || friendsError) {
       Store.addNotification({
         title: "Error!",
-        message: requestError,
+        message: requestError || newsError || friendsError,
         type: "danger",
         insert: "top",
         container: "top-right",
@@ -26,12 +32,12 @@ const Layout = () => {
         },
       });
     }
-  }, [requestError])
+  }, [requestError, newsError, friendsError])
   
   return (
     <div className="relative min-w-[320px] max-w-[375px] md:min-w-[375px] md:max-w-[768px] xl:min-w-[768px] xl:max-w-[1280px] m-auto p-5 md:p-8 text-[#262626]">
       
-      {isLoading ? (
+      {(isLoading) ? (
         <Loader />
       ) : (
           <Suspense>

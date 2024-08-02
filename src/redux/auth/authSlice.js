@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addPet, editUserInfo, getAllUserInfo, getCurrentUser, loginUser, logoutUser, registerUser, removePet } from "./authOperations";
-import { getOurFriends } from "../ourFriends/ourFriendsOpertions";
 
 const authSlice = createSlice({
     name: 'auth',
@@ -12,7 +11,6 @@ const authSlice = createSlice({
             email: "",
             phone: ""
         },
-        friends: [],
         favoritesList: [],
         petsList: [],
         isLoading: false,
@@ -62,19 +60,6 @@ const authSlice = createSlice({
             state.error = actions.payload;
             state.user.token = "";
             localStorage.setItem("token", "");
-        });
-        builder.addCase(getOurFriends.pending, (state) => {
-            state.isLoading = true;
-            state.error = null;
-        });
-        builder.addCase(getOurFriends.fulfilled, (state, actions) => {
-            state.isLoading = false;
-            state.error = null;
-            state.friends = actions.payload;
-        });
-        builder.addCase(getOurFriends.rejected, (state, actions) => {
-            state.isLoading = false;
-            state.error = actions.payload;
         });
         builder.addCase(getCurrentUser.pending, (state) => {
             state.isLoading = true;
