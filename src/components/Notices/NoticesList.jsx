@@ -95,11 +95,9 @@ const NoticesList = ({
   const isFavorite = (id) => {
     return favorites.includes(id) ? true : false;
   };
-  // console.log(notices);
 
-
-  return (gender === "all" && notices.length > 0) ||
-    (gender !== "all" && notices.length > 0) ? (
+  return ((gender === "all" && notices.length > 0) ||
+    (gender !== "all" && notices.length > 0) )&& (
     <ul className="my-10 xl:px-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 xl:gap-x-8 xl:gap-y-10 gap-5">
       {/* {(gender === "all" && notices.length > 0) && notices.map((item) => */}
       {notices.length > 0 &&
@@ -118,10 +116,6 @@ const NoticesList = ({
         <NoticesItem data={item} isFavorite={isFavorite(item._id)} setAddId={setAddId} setDeleteId={setDeleteId} />
       </li>))} */}
     </ul>
-  ) : (
-    <p>
-      There are no items for your request. Please, try change your search params
-    </p>
   );
 };
 

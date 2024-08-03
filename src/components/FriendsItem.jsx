@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 const FriendsItem = ({ data }) => {
-  // console.log(data)
+  console.log(data.addressUrl)
   const workDay = data.workDays?.find(day => day.isOpen);
   const cutString = (str, num) => {
     if (!str) return null;
@@ -33,7 +33,7 @@ const FriendsItem = ({ data }) => {
           <li className="text-[14px] leading-[129%] tracking-[-0.02em]">
             <span className="text-opacity-black">Address:</span>
             {data.address ? (
-              <a className="hover:underline cursor-pointer">
+              <a href={data.addressUrl} target="_blank" className="hover:underline cursor-pointer">
                 {" "}
                 {cutString(data.address, 18)}
               </a>

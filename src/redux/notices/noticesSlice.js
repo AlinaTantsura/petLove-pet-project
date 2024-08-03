@@ -10,6 +10,7 @@ import {
   removeFavoriteNotice,
 } from "./noticesOperations";
 import { getCurrentUser } from "../auth/authOperations";
+import { Store } from "react-notifications-component";
 
 const noticesSlice = createSlice({
   name: "notices",
@@ -28,10 +29,10 @@ const noticesSlice = createSlice({
   },
   reducers: {
     changeSexValue(state, actions) {
-      state.sexValue = actions.payload
+      state.sexValue = actions.payload;
     },
     changeSortWord(state, actions) {
-      state.sortWord = actions.payload
+      state.sortWord = actions.payload;
     },
   },
   extraReducers: (builder) => {
@@ -48,14 +49,44 @@ const noticesSlice = createSlice({
       state.isLoading = false;
       state.error = actions.payload;
     });
+    builder.addCase(getPetSex.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
     builder.addCase(getPetSex.fulfilled, (state, actions) => {
+      state.isLoading = false;
+      state.error = null;
       state.petSex = actions.payload;
     });
+    builder.addCase(getPetSex.rejected, (state, actions) => {
+      state.isLoading = false;
+      state.error = actions.payload;
+    });
+    builder.addCase(getPetType.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
     builder.addCase(getPetType.fulfilled, (state, actions) => {
+      state.isLoading = false;
+      state.error = null;
       state.types = actions.payload;
     });
+    builder.addCase(getPetType.rejected, (state, actions) => {
+      state.isLoading = false;
+      state.error = actions.payload;
+    });
+    builder.addCase(getCities.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
     builder.addCase(getCities.fulfilled, (state, actions) => {
+      state.isLoading = false;
+      state.error = null;
       state.cities = actions.payload;
+    });
+    builder.addCase(getCities.rejected, (state, actions) => {
+      state.isLoading = false;
+      state.error = actions.payload;
     });
     builder.addCase(getNotices.pending, (state) => {
       state.isLoading = true;
@@ -66,6 +97,22 @@ const noticesSlice = createSlice({
       state.error = null;
       state.notices = actions.payload.results;
       state.lastPage = actions.payload.totalPages;
+      if (state.notices.length === 0) {
+        Store.addNotification({
+          title: "Warning!",
+          message:
+            "There are no notices to your request. Try to change the requests parameters",
+          type: "info",
+          insert: "top",
+          container: "top-right",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+      }
     });
     builder.addCase(getNotices.rejected, (state, actions) => {
       state.isLoading = false;
@@ -78,21 +125,32 @@ const noticesSlice = createSlice({
     builder.addCase(getAllNotices.fulfilled, (state, actions) => {
       state.isLoading = false;
       state.error = null;
-      state.notices = actions.payload.results
-      
+      state.notices = actions.payload.results;
+
       if (state.sexValue !== "all") {
-        state.notices = state.notices.filter(item => item.sex === state.sexValue);
+        state.notices = state.notices.filter(
+          (item) => item.sex === state.sexValue
+        );
       }
       if (state.sortWord === "cheap") {
-        const noPrice = state.notices.filter(item => item.price === undefined);
-        const sortPrices = state.notices.filter(item => item.price).sort((itemPrev, itemNext) => itemPrev.price - itemNext.price);
-        state.notices = [...noPrice, ...sortPrices]
+        const noPrice = state.notices.filter(
+          (item) => item.price === undefined
+        );
+        const sortPrices = state.notices
+          .filter((item) => item.price)
+          .sort((itemPrev, itemNext) => itemPrev.price - itemNext.price);
+        state.notices = [...noPrice, ...sortPrices];
       }
       if (state.sortWord === "expensive") {
-        const noPrice = state.notices.filter(item => item.price === undefined);
-        const sortPrices = state.notices.filter(item => item.price).sort((itemPrev, itemNext) => itemNext.price - itemPrev.price);
-        state.notices = [...sortPrices, ...noPrice]
+        const noPrice = state.notices.filter(
+          (item) => item.price === undefined
+        );
+        const sortPrices = state.notices
+          .filter((item) => item.price)
+          .sort((itemPrev, itemNext) => itemNext.price - itemPrev.price);
+        state.notices = [...sortPrices, ...noPrice];
       }
+      if(state.notices.length === 0) console.log("Empty")
     });
     builder.addCase(getAllNotices.rejected, (state, actions) => {
       state.isLoading = false;
@@ -106,6 +164,20 @@ const noticesSlice = createSlice({
       state.isLoading = false;
       state.error = null;
       state.favIds = actions.payload;
+      Store.addNotification({
+          title: "Warning!",
+          message:
+            "There are no news to your request. Try to change a search word",
+          type: "info",
+          insert: "top",
+          container: "top-right",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
     });
     builder.addCase(addFavoriteNotice.rejected, (state, actions) => {
       state.isLoading = false;
@@ -138,5 +210,5 @@ const noticesSlice = createSlice({
   },
 });
 
-export const { changeSexValue, changeSortWord} = noticesSlice.actions;
+export const { changeSexValue, changeSortWord } = noticesSlice.actions;
 export default noticesSlice.reducer;
