@@ -4,6 +4,7 @@ import {
   getAllNotices,
   getCategories,
   getCities,
+  getNoticeById,
   getNotices,
   getPetSex,
   getPetType,
@@ -26,6 +27,7 @@ const noticesSlice = createSlice({
     error: null,
     sexValue: "all",
     sortWord: null,
+    currentNotice: null,
   },
   reducers: {
     changeSexValue(state, actions) {
@@ -165,10 +167,10 @@ const noticesSlice = createSlice({
       state.error = null;
       state.favIds = actions.payload;
       Store.addNotification({
-          title: "Warning!",
+          title: "Success!",
           message:
-            "There are no news to your request. Try to change a search word",
-          type: "info",
+            "The notice is successfully added to your favorite list",
+          type: "success",
           insert: "top",
           container: "top-right",
           animationIn: ["animate__animated", "animate__fadeIn"],
@@ -191,6 +193,20 @@ const noticesSlice = createSlice({
       state.isLoading = false;
       state.error = null;
       state.favIds = actions.payload;
+      Store.addNotification({
+          title: "Success!",
+          message:
+            "The notice is successfully removed from your favorite list",
+          type: "success",
+          insert: "top",
+          container: "top-right",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
     });
     builder.addCase(removeFavoriteNotice.rejected, (state, actions) => {
       state.isLoading = false;
@@ -201,9 +217,24 @@ const noticesSlice = createSlice({
       state.error = null;
     });
     builder.addCase(getCurrentUser.fulfilled, (state, actions) => {
+      state.isLoading = false;
+      state.error = null;
       state.favIds = actions.payload.map((item) => item._id);
     });
     builder.addCase(getCurrentUser.rejected, (state, actions) => {
+      state.isLoading = false;
+      state.error = actions.payload;
+    });
+    builder.addCase(getNoticeById.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(getNoticeById.fulfilled, (state, actions) => {
+      state.isLoading = false;
+      state.error = null;
+      state.currentNotice = actions.payload;
+    });
+    builder.addCase(getNoticeById.rejected, (state, actions) => {
       state.isLoading = false;
       state.error = actions.payload;
     });

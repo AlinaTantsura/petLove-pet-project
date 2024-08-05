@@ -12,6 +12,7 @@ const ModalApproveAction = ({ open, onClose }) => {
     const dispatch = useDispatch();
     const handleLogout = () => {
         dispatch(logoutUser());
+        onClose();
         navigate("/");
     }
   return (

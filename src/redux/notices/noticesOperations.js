@@ -117,3 +117,16 @@ export const removeFavoriteNotice = createAsyncThunk(
     }
   }
 );
+
+export const getNoticeById = createAsyncThunk(
+  "notices/getNoticeById",
+  async (id, thunkAPI) => {
+    try {
+      const resp = await axios.get(`/notices/${id}`);
+      return resp.data
+    }
+    catch (error){
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+)

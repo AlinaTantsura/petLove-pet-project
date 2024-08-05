@@ -101,9 +101,10 @@ const NoticesItem = ({ data, isFavorite, setAddId, setDeleteId }) => {
           </div>
         </div>
       </div>
-      {isLogin ? (
+      {(open && isLogin) && (
         <ModalNotice onClose={() => setOpen(false)} open={open} data={data} setAddId={setAddId} setDeleteId={setDeleteId} isFavorite={isFavorite} />
-      ) : (
+      )}
+      {(open && !isLogin) && (
         <ModalAttention onClose={() => setOpen(false)} open={open} />
       )}
     </>

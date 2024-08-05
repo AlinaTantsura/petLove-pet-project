@@ -83,14 +83,14 @@ const NoticesList = ({
 
   useEffect(() => {
     if (addId) {
-      dispatch(addFavoriteNotice(addId));
+      dispatch(addFavoriteNotice(addId))
       setAddId(null);
     }
     if (deleteId) {
       dispatch(removeFavoriteNotice(deleteId));
       setDeleteId(null);
     }
-  }, [dispatch, addId, deleteId]);
+  }, [dispatch, addId, deleteId, notices]);
 
   const isFavorite = (id) => {
     return favorites.includes(id) ? true : false;

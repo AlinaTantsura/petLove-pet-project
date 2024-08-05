@@ -2,25 +2,26 @@ import { Suspense, useEffect } from "react";
 import Header from "./Header";
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectError, selectIsLoading } from "../redux/auth/authSelectors";
+import { selectError } from "../redux/auth/authSelectors";
 import { Loader } from "./Loader";
 import { Store } from "react-notifications-component";
 import { selectErrorNews } from "../redux/news/newsSelectors";
 import { selectOurFriendsError, selectOurFriendsIsLoading } from "../redux/ourFriends/ourFriendsSelectors";
+import { selectErrorNotices } from "../redux/notices/noticesSelectors";
 
 const Layout = () => {
   // const isLoading = useSelector(selectIsLoading);
-  const isLoading = useSelector(selectOurFriendsIsLoading);
+  const isLoadingFriends = useSelector(selectOurFriendsIsLoading);
   const requestError = useSelector(selectError);
   const newsError = useSelector(selectErrorNews);
+  const noticesError = useSelector(selectErrorNotices);
   const friendsError = useSelector(selectOurFriendsError);
-  // console.log(requestError)
 
   useEffect(() => {
-    if (requestError || newsError || friendsError) {
+    if (requestError || newsError || friendsError || noticesError) {
       Store.addNotification({
         title: "Error!",
-        message: requestError || newsError || friendsError,
+        message: requestError || newsError || friendsError || noticesError,
         type: "danger",
         insert: "top",
         container: "top-right",
@@ -32,12 +33,12 @@ const Layout = () => {
         },
       });
     }
-  }, [requestError, newsError, friendsError])
+  }, [requestError, newsError, friendsError, noticesError])
   
   return (
     <div className="relative min-w-[320px] max-w-[375px] md:min-w-[375px] md:max-w-[768px] xl:min-w-[768px] xl:max-w-[1280px] m-auto p-5 md:p-8 text-[#262626]">
       
-      {(isLoading) ? (
+      {(isLoadingFriends) ? (
         <Loader />
       ) : (
           <Suspense>

@@ -6,7 +6,7 @@ const PetCard = ({ data, setIdForRemove }) => {
   return (
       <div className="relative w-full flex gap-[14px] xl:gap-[25px] items-center border border-[rgba(38, 38, 38, 0.1)] rounded-[20px] py-4 md:py-[22px] px-4 xl:p-5">
           <div className="w-[66px] md:w-[75px] xl:w-[90px] h-[66px] md:h-[75px] xl:h-[90px] rounded-full bg-white overflow-hidden">
-              <img src={data.imgURL} alt={data.title} />
+              <img src={data.imgURL} alt={data.title} className="w-full h-full object-cover" />
           </div>
           <div>
               <h3 className="mb-2 font-bold text-[14px] leading-[129%] text-[#2b2b2a]">{data.title.length > 20 ? `${data.title.slice(0,19)}...` : data.title}</h3>

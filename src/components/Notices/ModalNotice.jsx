@@ -2,14 +2,28 @@
 import ModalWindow from "../ModalWindow";
 import sprite from "../../assets/images/sprite.svg"
 import Button from "../Button";
+import { useDispatch, useSelector } from "react-redux";
+import { getNoticeById } from "../../redux/notices/noticesOperations";
+import { selectCurrentNotice } from "../../redux/notices/noticesSelectors";
+import { useEffect } from "react";
 
 const ModalNotice = ({ onClose, open, data, isFavorite, setAddId, setDeleteId }) => {
+    const dispatch = useDispatch();
+    const currentNotice = useSelector(selectCurrentNotice);
     const handleFavorites = () => {
         if (isFavorite) setDeleteId(data._id)
         else setAddId(data._id)
     }
+
+    useEffect(() => {
+        dispatch(getNoticeById(data._id))
+    }, [dispatch, data])
+    
     const arrayStars = [1, 2, 3, 4, 5].slice(0, data.popularity)
     const arrayGreyStars = [1, 2, 3, 4, 5].slice(data.popularity)
+
+    const linkHref = currentNotice?.user.email;
+    if (!open) return null
   return (
       <ModalWindow onClose={onClose} open={open}>
           <div className="w-[335px] md:w-[473px] px-5 py-10 flex flex-col items-center ">
@@ -72,7 +86,7 @@ const ModalNotice = ({ onClose, open, data, isFavorite, setAddId, setDeleteId })
                           <use href={sprite + "#icon-heart-white"} />
                       </svg>
                   </Button>
-                  <Button className="bg-[#fff4df] rounded-[30px] px-[37px] md:px-[50px] py-3 md:py-[14px] text-orange-main text-[16px]">Contact</Button>
+                  <a href={`mailto:${linkHref}`} className="bg-[#fff4df] rounded-[30px] px-[37px] md:px-[50px] py-3 md:py-[14px] text-orange-main text-[16px]">Contact</a>
               </div>
           </div>
     </ModalWindow>

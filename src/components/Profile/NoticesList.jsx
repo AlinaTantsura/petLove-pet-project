@@ -16,7 +16,6 @@ const PetsList = () => {
       setIdForRemove(null)
     }
   },[dispatch, idForRemove])
-  console.log(idForRemove)
   if (petsList.length === 0) return null;
   return (
     <ul className="flex flex-wrap gap-[14px]">
