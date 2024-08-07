@@ -19,8 +19,11 @@ const addPetSchema = yup.object().shape({
   imgURL: yup
     .string()
     .required()
-    .matches(/^https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp)$/, "URL doesn't match"),
-  species: yup.string().required(),
+    .matches(
+      /^https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp)$/,
+      "URL doesn't match"
+    ),
+  species: yup.string().required("Choose the type of your pet"),
   birthday: yup
     .string()
     .required()
@@ -52,9 +55,15 @@ const AddPetForm = () => {
 
   const onSubmit = (data) => {
     data.species = data.species.toLowerCase();
-    dispatch(addPet(data));
-    navigate("/profile")
+    dispatch(addPet(data)).then((resp) => {
+      if (resp.meta.requestStatus === "fulfilled") navigate("/profile");
+    });
   };
+  const handleAddPicture = (e) => {
+    setUrlFieldValue(URL.createObjectURL(e.target.files[0]));
+  };
+
+  console.log(type);
   return (
     <section className="xl:w-[592px] bg-white rounded-[30px] md:rounded-[60px] p-4 pt-[25px] md:py-10 md:px-[136px] xl:py-[60px] xl:px-[80px]">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -139,17 +148,19 @@ const AddPetForm = () => {
             </svg>
           </label>
           {errors.sex && (
-              
-                <span className="absolute left-0 top-[48px] ml-4 text-[10px] md:text-[12px] leading-[120%] md:leading-[117%] text-error-color">
-                  {errors.sex.message}
-                </span>
-            
-            )}
+            <span className="absolute left-0 top-[48px] ml-4 text-[10px] md:text-[12px] leading-[120%] md:leading-[117%] text-error-color">
+              {errors.sex.message}
+            </span>
+          )}
         </div>
-        <div className="mx-auto mb-4 md:mb-3 w-[68px] md:w-[86px] h-[68px] md:h-[86px] rounded-full bg-[#fff4df] flex justify-center items-center">
-          <svg className="w-[34px] h-[34px] md:w-[44px] md:h-[44px]">
-            <use href={sprite + "#icon-icons8_cat-footprint"} />
-          </svg>
+        <div className="mx-auto mb-4 md:mb-3 w-[68px] md:w-[86px] h-[68px] md:h-[86px] rounded-full bg-[#fff4df] flex justify-center items-center overflow-hidden">
+          {urlFieldValue ? (
+            <img src={urlFieldValue} className="w-full h-full object-cover" />
+          ) : (
+            <svg className="w-[34px] h-[34px] md:w-[44px] md:h-[44px]">
+              <use href={sprite + "#icon-icons8_cat-footprint"} />
+            </svg>
+          )}
         </div>
         <ul className="flex flex-col gap-[10px] md:gap-[18px]">
           <li className="flex gap-2">
@@ -164,6 +175,7 @@ const AddPetForm = () => {
                 )}
                 type="text"
                 placeholder="Enter URL"
+                value={urlFieldValue}
                 {...register("imgURL", {
                   onChange: (e) => setUrlFieldValue(e.target.value),
                 })}
@@ -179,23 +191,34 @@ const AddPetForm = () => {
                 </>
               )}
             </div>
-            <button type="button" className="rounded-[30px] h-[36px] md:h-[42px] bg-[#fff4df] p-[10px] md:px-4 md:py-3 flex gap-[5px] items-center justify-center text-[12px] md:text-[14px] leading-[133%] md:leading-[129%] tracking-[-0.02em] text-black-main">
+            <label
+              className="rounded-[30px] h-[36px] md:h-[42px] bg-[#fff4df] p-[10px] md:px-4 md:py-3 flex gap-[5px] items-center justify-center text-[12px] md:text-[14px] leading-[133%] md:leading-[129%] tracking-[-0.02em] text-black-main"
+              htmlFor="file"
+            >
               Upload photo
               <svg className="w-[16px] h-[16px] md:w-[18px] md:h-[18px]">
                 <use href={sprite + "#icon-upload-cloud"} />
               </svg>
-            </button>
+            </label>
+            <input
+              type="file"
+              onChange={handleAddPicture}
+              id="file"
+              className="hidden"
+            />
           </li>
           <li className="relative">
             <input
               className={clsx(
                 "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50",
-                (titleFieldValue !== "" && !errors.title) && "border-orange-main",
+                titleFieldValue !== "" && !errors.title && "border-orange-main",
                 errors.title && "border-error-color"
               )}
               type="text"
               placeholder="Title"
-              {...register("title", {onChange: (e) => setTitleFieldValue(e.target.value)})}
+              {...register("title", {
+                onChange: (e) => setTitleFieldValue(e.target.value),
+              })}
             />
             {errors.title && (
               <>
@@ -212,12 +235,14 @@ const AddPetForm = () => {
             <input
               className={clsx(
                 "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50",
-                (nameFieldValue !== "" && !errors.name) && "border-orange-main",
+                nameFieldValue !== "" && !errors.name && "border-orange-main",
                 errors.name && "border-error-color"
               )}
               type="text"
               placeholder="Pet's Name"
-              {...register("name", {onChange: (e) => setNameFieldValue(e.target.value)})}
+              {...register("name", {
+                onChange: (e) => setNameFieldValue(e.target.value),
+              })}
             />
             {errors.name && (
               <>
@@ -231,24 +256,10 @@ const AddPetForm = () => {
             )}
           </li>
           <li className="flex gap-2 md:gap-3">
-            <div className="relative min-w-[144px]">
-              {/* <input
-                className={clsx(
-                  "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50",
-                  // userData.name && "border-orange-main",
-                  errors.name && "border-error-color"
-                )}
-                type="text"
-                placeholder="00.00.0000"
-                {...register("birthday")}
-              />
-              <svg className="w-[18px] h-[18px] md:w-5 md:h-5 absolute top-3 md:top-4 right-3 md:right-4">
-                <use href={sprite + "#icon-calendar"} />
-              </svg> */}
+            <div className="relative w-[144px] md:w-[210px]">
               <input
                 className={clsx(
                   "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50 cursor-default",
-                  // userData.name && "border-orange-main",
                   errors.birthday ? "border-error-color" : "border-orange-main",
                   "date-input"
                 )}
@@ -269,11 +280,15 @@ const AddPetForm = () => {
               </svg>
               <CalendarBox open={openCalendar} date={date} setDate={setDate} />
             </div>
-            <div className="relative">
+            <div className="relative w-[143px] md:w-[210px]">
               <input
                 type="text"
                 onClick={() => setOpenPetTypeMenu(!openPetTypeMenu)}
-                className="w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50 cursor-default"
+                className={clsx(
+                  "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50 cursor-default",
+                  type !== "" && "border-orange-main",
+                  errors.species && "border-error-color"
+                )}
                 placeholder="Type of pet"
                 value={type}
                 {...register("species")}
@@ -286,6 +301,11 @@ const AddPetForm = () => {
               >
                 <use href={sprite + "#icon-chevron-down"} />
               </svg>
+              {errors.species && (
+                <span className="ml-4 text-[10px] md:text-[12px] leading-[120%] md:leading-[117%] text-error-color">
+                  {errors.species.message}
+                </span>
+              )}
               <PetTypeMenu
                 open={openPetTypeMenu}
                 types={types}
