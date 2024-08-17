@@ -18,8 +18,8 @@ const newsSlice = createSlice({
     builder.addCase(getNews.fulfilled, (state, actions) => {
       state.isLoading = false;
       state.error = null;
-      state.news = actions.payload.results;
-      if (actions.payload.results.length === 0)
+      
+      if (actions.payload.results.length === 0) {
         Store.addNotification({
           title: "Warning!",
           message:
@@ -34,6 +34,9 @@ const newsSlice = createSlice({
             onScreen: true,
           },
         });
+        return;        
+      }
+      state.news = actions.payload.results;
       state.lastPage = actions.payload.totalPages;
     });
     builder.addCase(getNews.rejected, (state, actions) => {

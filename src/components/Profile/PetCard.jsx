@@ -8,7 +8,7 @@ const PetCard = ({ data, setIdForRemove }) => {
           <div className="w-[66px] md:w-[75px] xl:w-[90px] h-[66px] md:h-[75px] xl:h-[90px] rounded-full bg-white overflow-hidden">
               <img src={data.imgURL} alt={data.title} className="w-full h-full object-cover" />
           </div>
-          <div>
+          <div className="pr-5">
               <h3 className="mb-2 font-bold text-[14px] leading-[129%] text-[#2b2b2a]">{data.title.length > 20 ? `${data.title.slice(0,19)}...` : data.title}</h3>
               <ul className="flex flex-wrap gap-[10px] xl:gap-[27px] text-[12px] leading-[117%] tracking-[-0.02em]">
                   <li className="flex flex-col gap-1"><span className="text-[10px] leading-[140%] text-opacity-black">Name</span>{data.name}</li>

@@ -19,7 +19,7 @@ const PetsList = () => {
   if (petsList.length === 0) return null;
   return (
     <ul className="flex flex-wrap gap-[14px]">
-      {petsList.slice(0, 4).map(pet => (
+      {petsList.map(pet => (
         <li className="w-full md:w-[305px] xl:w-full" key={pet._id}>
           <PetCard data={pet} setIdForRemove={setIdForRemove} />
         </li>

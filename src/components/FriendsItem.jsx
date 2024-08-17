@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 const FriendsItem = ({ data }) => {
-  console.log(data.addressUrl)
   const workDay = data.workDays?.find(day => day.isOpen);
   const cutString = (str, num) => {
     if (!str) return null;

@@ -1,16 +1,15 @@
 import { Suspense, useEffect } from "react";
 import Header from "./Header";
-import { Outlet } from "react-router-dom";
+import { Outlet} from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectError } from "../redux/auth/authSelectors";
 import { Loader } from "./Loader";
 import { Store } from "react-notifications-component";
-import { selectErrorNews } from "../redux/news/newsSelectors";
+import { selectErrorNews} from "../redux/news/newsSelectors";
 import { selectOurFriendsError, selectOurFriendsIsLoading } from "../redux/ourFriends/ourFriendsSelectors";
 import { selectErrorNotices } from "../redux/notices/noticesSelectors";
 
 const Layout = () => {
-  // const isLoading = useSelector(selectIsLoading);
   const isLoadingFriends = useSelector(selectOurFriendsIsLoading);
   const requestError = useSelector(selectError);
   const newsError = useSelector(selectErrorNews);

@@ -45,14 +45,19 @@ const AddPetForm = () => {
   const [date, setDate] = useState(new Date());
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(addPetSchema) });
+    } = useForm({ resolver: yupResolver(addPetSchema) });
 
   useEffect(() => {
     if (!types) dispatch(getPetType());
-  }, [dispatch, types]);
+    if (type) setValue("species", type);
+  }, [dispatch, types, type, setValue]);
 
+  useEffect(() => {
+    if(urlFieldValue) setValue("imgURL", urlFieldValue)
+  }, [urlFieldValue, setValue])
   const onSubmit = (data) => {
     data.species = data.species.toLowerCase();
     dispatch(addPet(data)).then((resp) => {
@@ -63,7 +68,6 @@ const AddPetForm = () => {
     setUrlFieldValue(URL.createObjectURL(e.target.files[0]));
   };
 
-  console.log(type);
   return (
     <section className="xl:w-[592px] bg-white rounded-[30px] md:rounded-[60px] p-4 pt-[25px] md:py-10 md:px-[136px] xl:py-[60px] xl:px-[80px]">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -175,7 +179,6 @@ const AddPetForm = () => {
                 )}
                 type="text"
                 placeholder="Enter URL"
-                value={urlFieldValue}
                 {...register("imgURL", {
                   onChange: (e) => setUrlFieldValue(e.target.value),
                 })}
@@ -283,6 +286,7 @@ const AddPetForm = () => {
             <div className="relative w-[143px] md:w-[210px]">
               <input
                 type="text"
+                autoComplete="false"
                 onClick={() => setOpenPetTypeMenu(!openPetTypeMenu)}
                 className={clsx(
                   "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main placeholder:text-opacity-50 cursor-default",
@@ -290,7 +294,6 @@ const AddPetForm = () => {
                   errors.species && "border-error-color"
                 )}
                 placeholder="Type of pet"
-                value={type}
                 {...register("species")}
               />
               <svg

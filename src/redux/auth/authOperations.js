@@ -40,13 +40,6 @@ export const loginUser = createAsyncThunk(
     }
 );
 
-export const getUserInfo = createAsyncThunk(
-    "user/getUserInfo",
-    async () => {
-        
-    }
-);
-
 export const logoutUser = createAsyncThunk(
     "user/logout",
     async (_, thunkAPI) => {

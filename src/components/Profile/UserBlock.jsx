@@ -1,11 +1,8 @@
 /* eslint-disable react/prop-types */
 import clsx from "clsx";
 import sprite from "../../assets/images/sprite.svg";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../redux/auth/authSelectors";
 
-const UserBlock = () => {
-    const data = useSelector(selectUser);
+const UserBlock = ({data, setOpenModal}) => {
   return (
     <div className="">
       <div className="w-[80px] rounded-[30px] bg-orange-main px-[14px] py-[10px] flex gap-1 items-center text-[14px] leading-[129%] tracking-[-0.02em] text-white">
@@ -16,7 +13,7 @@ const UserBlock = () => {
       </div>
       {data.avatar ? (
         <div className="mb-2 m-auto w-[94px] h-[94px] md:w-[110px] md:h-[110px] rounded-full overflow-hidden">
-        <img src={data.avatar} className="w-full h-full" alt="User avatar" />
+        <img src={data.avatar} className="w-full h-full object-cover" alt="User avatar" />
         </div>
       ) : (
         <div className="text-center mb-[28px] md:mb-5">
@@ -25,9 +22,9 @@ const UserBlock = () => {
               <use href={sprite + "#icon-user-02"} />
             </svg>
           </div>
-          <a className="text-[12px] md:text-[14px] leading-[133%] md:leading-[129%] tracking-[-0.02em] underline text-black-main">
+          <span onClick={setOpenModal} className="text-[12px] md:text-[14px] leading-[133%] md:leading-[129%] tracking-[-0.02em] underline text-black-main cursor-pointer">
             Upload photo
-          </a>
+          </span>
         </div>
       )}
       <div>

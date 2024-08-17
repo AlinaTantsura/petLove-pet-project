@@ -8,9 +8,10 @@ import clsx from "clsx";
 import Button from "../Button";
 import { editUserInfo } from "../../redux/auth/authOperations";
 import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 
 const editUserSchema = yup.object().shape({
-  name: yup.string(),
+  name: yup.string().min(2),
   email: yup
     .string()
     .matches(
@@ -19,36 +20,51 @@ const editUserSchema = yup.object().shape({
     ),
   avatar: yup
     .string()
-    // .oneOf([/^https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp)$/, ""], "Enter a valid URL"),
     .matches(
       /^https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp)$/,
-      {excludeEmptyString: true},
-      "Enter a valid URL"
+      {excludeEmptyString: true, message:"Enter a valid URL"}, 
     ),
   phone: yup
     .string()
-    // .matches(/^\+38\d{10}$ | +380/, "Phone number must be in format +380123456789"),
-    .matches(/^\+38\d{10}$/,{excludeEmptyString: true}, "Phone number must be in format +380123456789"),
+    .matches(/^\+38\d{10}$/,{excludeEmptyString: true, message: "Phone number must be in format +380123456789"}, ),
 });
 
 const ModalEditUser = ({ open, onClose, userData }) => {
   const dispatch = useDispatch();
+  const [urlFieldValue, setUrlFieldValue] = useState();
   const {
     register,
     handleSubmit,
-    // reset,
+    setValue,
+    reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(editUserSchema) });
-  // console.log(errors);
+
+  useEffect(() => {
+    if (urlFieldValue) setValue("avatar", urlFieldValue)
+    else if (userData.avatar) setValue("avatar", userData.avatar)
+    else setValue("avatar", "")
+    return () => {
+      if (!open) {
+        reset()
+        setUrlFieldValue("");
+      }
+    }
+  }, [urlFieldValue, setValue, reset, open, setUrlFieldValue, userData.avatar]);
+
   const onSubmit = (data) => {
-    // console.log(data)
     const editInfo = {}
     for (let key in data) {
       if(data[key] !== userData[key]) editInfo[key] = data[key]
     }
     dispatch(editUserInfo(editInfo));
-    // console.log(editInfo)
   }
+
+  const handleAddPicture = (e) => {
+    setUrlFieldValue(URL.createObjectURL(e.target.files[0]));
+  };
+
+  if (!open) return null;
   return (
     <ModalWindow open={open} onClose={onClose}>
       <form onSubmit={handleSubmit(onSubmit)} className="px-5 py-10 md:p-[50px]">
@@ -56,8 +72,8 @@ const ModalEditUser = ({ open, onClose, userData }) => {
           Edit information
         </h2>
         <div className="mb-3 m-auto w-[80px] h-[80px] md:w-[86px] md:h-[86px] rounded-full bg-[#fff4df] flex justify-center items-center overflow-hidden">
-          {userData.avatar ? (
-        <img src={userData.avatar} className="w-full h-full" alt="User avatar" />
+          {(urlFieldValue || userData.avatar) ? (
+        <img src={urlFieldValue || userData.avatar} className="w-full h-full object-cover" alt="User avatar" />
           ) : (
             <svg className="w-[40px] h-[40px] md:w-[50px] md:h-[50px]">
               <use href={sprite + "#icon-user-02"} />
@@ -69,19 +85,20 @@ const ModalEditUser = ({ open, onClose, userData }) => {
             <div className="relative w-[161px] md:w-[226px]">
               <input
                 className={clsx(
-                  "w-full px-3 py-[13px] md:p-3 border border-border-black rounded-[30px] outline-none text-[12px] md:text-[14px] leading-[133%] md:leading-[129%] tracking-[-0.02em]",
+                  "w-full px-3 py-[13px] pr-10 md:pr-10 md:p-3 border border-border-black rounded-[30px] outline-none text-[12px] md:text-[14px] leading-[133%] md:leading-[129%] tracking-[-0.02em]",
                   userData.avatar && "border-orange-main",
                   errors.avatar && "border-error-color",
                 )}
                 type="text"
-                // value={userData.avatar || "Avatar URL"}
-                defaultValue={userData.avatar || ""}
+                // value={urlFieldValue || userData.avatar || ""}
                 placeholder="Avatar URL"
-                {...register("avatar")}
+                {...register("avatar", {
+                  onChange: (e) => setUrlFieldValue(e.target.value),
+                })}
               />
               {errors.avatar && (
                 <>
-                  <svg className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] absolute top-[12px] md:top-[15px] right-[12px] md:right-[19px] ">
+                  <svg className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] absolute top-[12px] right-[12px] md:right-[15px] ">
                     <use href={sprite + "#icon-cross-small"} />
                   </svg>
                   <span className="ml-4 text-[10px] md:text-[12px] leading-[120%] md:leading-[117%] text-error-color">
@@ -90,18 +107,27 @@ const ModalEditUser = ({ open, onClose, userData }) => {
                 </>
               )}
             </div>
-            <button className="md:w-[146px] rounded-[30px] bg-[#fff4df] p-3 flex gap-2 items-center justify-center text-[12px] md:text-[14px] leading-[133%] md:leading-[129%] tracking-[-0.02em]">
+            <label
+              className="rounded-[30px] h-[36px] md:h-[42px] bg-[#fff4df] p-[10px] md:px-4 md:py-3 flex gap-[5px] items-center justify-center text-[12px] md:text-[14px] leading-[133%] md:leading-[129%] tracking-[-0.02em] text-black-main"
+              htmlFor="file"
+            >
               Upload photo
-              <svg className="w-[18px] h-[18px]">
+              <svg className="w-[16px] h-[16px] md:w-[18px] md:h-[18px]">
                 <use href={sprite + "#icon-upload-cloud"} />
               </svg>
-            </button>
+            </label>
+            <input
+              type="file"
+              onChange={handleAddPicture}
+              id="file"
+              className="hidden"
+            />
           </li>
           <li className="relative">
             <input
               className={clsx(
                 "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%]",
-                userData.name && "border-orange-main",
+                (userData.name && !errors.name) && "border-orange-main",
                 errors.name && "border-error-color",
               )}
               type="text"
@@ -123,7 +149,7 @@ const ModalEditUser = ({ open, onClose, userData }) => {
             <input
               className={clsx(
                 "w-full p-3 md:p-4 border border-border-black rounded-[30px] outline-none text-[14px] md:text-[16px] leading-[129%] md:leading-[125%] placeholder:text-black-main",
-                userData.email && "border-orange-main",
+                (userData.email && !errors.email) && "border-orange-main",
                 errors.email && "border-error-color",
               )}
               type="email"

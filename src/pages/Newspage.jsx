@@ -4,7 +4,7 @@ import NewsList from "../components/News/NewsList.jsx";
 import Pagination from "../components/News/Pagination.jsx";
 import SearchField from "../components/News/SearchField.jsx";
 import Title from "../components/Title.jsx";
-import { selectErrorNews, selectisLoadingNews, selectLastPage } from "../redux/news/newsSelectors.js";
+import { selectErrorNews, selectisLoadingNews, selectLastPage, selectNews } from "../redux/news/newsSelectors.js";
 import { Loader } from "../components/Loader.jsx";
 import { getNews } from "../redux/news/newsOperations.js";
 
@@ -14,6 +14,7 @@ const Newspage = () => {
   const lastPage = useSelector(selectLastPage);
   const isLoadingNews = useSelector(selectisLoadingNews);
   const newsError = useSelector(selectErrorNews);
+  const newsList = useSelector(selectNews);
   const dispatch = useDispatch();
   useEffect(() => {
     setPage(1)
@@ -31,7 +32,7 @@ const Newspage = () => {
           <SearchField isNews={true} setSearchWord={setSearchWord} />
         </div>
       </div>
-      <NewsList />
+      <NewsList newsList={newsList} />
       <Pagination setPage={setPage} page={page} lastPage={lastPage}/>
     </div>
   );
